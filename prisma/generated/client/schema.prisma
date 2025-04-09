@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                   Int           @id @default(autoincrement())
+  email                String        @unique
+  password             String
+  name                 String
+  phone                String?
+  bio                  String?
+  avatar               String?       @default("https://res.cloudinary.com/dkyco4yqp/image/upload/v1738487804/user-circle-svgrepo-com_az7hcs.png")
+  skills               String[]
+  experience           Experience[]
+  education            Education[]
+  applications         Application[]
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  isVerified           Boolean       @default(false)
+  verificationToken    String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  googleId             String?       @unique
+}
+
+model Company {
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  password             String
+  name                 String
+  description          String?
+  website              String?
+  logo                 String?   @default("https://res.cloudinary.com/dkyco4yqp/image/upload/v1738487804/user-circle-svgrepo-com_az7hcs.png")
+  location             String?
+  industry             String?
+  size                 String?
+  jobs                 Job[]
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  isVerified           Boolean   @default(false)
+  verificationToken    String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  googleId             String?   @unique
+}
+
+model Job {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  location     String
+  requirements String
+  salary       String?
+  jobType      JobType       @default(FULL_TIME)
+  experience   String?
+  deadline     DateTime
+  company      Company       @relation(fields: [companyId], references: [id])
+  companyId    Int
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isActive     Boolean       @default(true)
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  coverLetter String?
+  resume      String?
+  job         Job               @relation(fields: [jobId], references: [id])
+  jobId       Int
+  applicant   User              @relation(fields: [applicantId], references: [id])
+  applicantId Int
+  status      ApplicationStatus @default(PENDING)
+  interviews  Interview[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Interview {
+  id            Int             @id @default(autoincrement())
+  scheduledAt   DateTime
+  status        InterviewStatus @default(PENDING)
+  notes         String?
+  application   Application     @relation(fields: [applicationId], references: [id])
+  applicationId Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  title       String
+  company     String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean   @default(false)
+  description String?
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Education {
+  id           Int       @id @default(autoincrement())
+  school       String
+  degree       String
+  fieldOfStudy String
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String?
+  user         User      @relation(fields: [userId], references: [id])
+  userId       Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum ApplicationStatus {
+  PENDING
+  PROCESSING
+  ACCEPTED
+  REJECTED
+}
+
+enum InterviewStatus {
+  PENDING
+  SCHEDULED
+  COMPLETED
+  RESCHEDULED
+  CANCELLED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
