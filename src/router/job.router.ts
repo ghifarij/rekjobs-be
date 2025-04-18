@@ -1,8 +1,8 @@
-import { RequestHandler, Router } from "express";
-import { JobController } from "../controller/job.controller";
+import { Router } from "express";
+import { JobController } from "../controller/job/job.controller";
 
 export class JobRouter {
-  private router: Router;
+  public router: Router;
   private jobController: JobController;
 
   constructor() {
@@ -11,34 +11,10 @@ export class JobRouter {
     this.initializeRoutes();
   }
 
-  private initializeRoutes(): void {
-    // Public routes
-    this.router.get(
-      "/",
-      this.jobController.getAllJobs as unknown as RequestHandler
-    );
-    this.router.get(
-      "/search",
-      this.jobController.searchJobs as unknown as RequestHandler
-    );
-    this.router.get(
-      "/:id",
-      this.jobController.getJobById as unknown as RequestHandler
-    );
+  private initializeRoutes() {
+    this.router.get("/", this.jobController.getAllJobs);
 
-    // Protected routes (company only)
-    this.router.post(
-      "/",
-      this.jobController.createJob as unknown as RequestHandler
-    );
-    this.router.put(
-      "/:id",
-      this.jobController.updateJob as unknown as RequestHandler
-    );
-    this.router.delete(
-      "/:id",
-      this.jobController.deleteJob as unknown as RequestHandler
-    );
+    this.router.get("/:slug", this.jobController.getJobBySlug);
   }
 
   public getRouter(): Router {

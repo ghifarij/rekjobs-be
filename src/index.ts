@@ -5,13 +5,11 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
 // Import routers
-import { AuthRouter } from "./router/auth.router";
-import { UserRouter } from "./router/user.router";
-import { CompanyRouter } from "./router/company.router";
+import { AuthUserRouter } from "./router/authUser.router";
+import { AuthCompanyRouter } from "./router/authCompany.router";
+import { CompanyJobRouter } from "./router/companyJob.router";
+import { SessionRouter } from "./router/session.router";
 import { JobRouter } from "./router/job.router";
-import { ApplicationRouter } from "./router/application.router";
-import InterviewRouter from "./router/interview.router";
-
 // Load environment variables
 dotenv.config();
 
@@ -30,21 +28,17 @@ app.use(
 );
 
 // Initialize routers
-const authRouter = new AuthRouter();
-const userRouter = new UserRouter();
-const companyRouter = new CompanyRouter();
+const authUserRouter = new AuthUserRouter();
+const authCompanyRouter = new AuthCompanyRouter();
+const sessionRouter = new SessionRouter();
+const companyJobRouter = new CompanyJobRouter();
 const jobRouter = new JobRouter();
-const applicationRouter = new ApplicationRouter();
-const interviewRouter = new InterviewRouter();
-
 // Routes
-app.use("/api/auth", authRouter.getRouter());
-app.use("/api/users", userRouter.getRouter());
-app.use("/api/companies", companyRouter.getRouter());
+app.use("/api/auth/user", authUserRouter.getRouter());
+app.use("/api/auth/company", authCompanyRouter.getRouter());
+app.use("/api/auth/session", sessionRouter.getRouter());
+app.use("/api/company-jobs", companyJobRouter.getRouter());
 app.use("/api/jobs", jobRouter.getRouter());
-app.use("/api/applications", applicationRouter.getRouter());
-app.use("/api/interviews", interviewRouter.getRouter());
-
 // Health check route
 app.get("/api", (req: Request, res: Response) => {
   res.status(200).json({ status: "ok", message: "Welcome to RekJobs API" });

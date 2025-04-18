@@ -55,6 +55,7 @@ model Job {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
+  slug         String        @unique
   location     String
   requirements String
   salary       String?
