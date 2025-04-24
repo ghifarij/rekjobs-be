@@ -18,6 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const google_auth_library_1 = require("google-auth-library");
 const email_1 = require("../utils/email");
+const resetPasswordEmail_1 = require("../utils/resetPasswordEmail");
 class AuthUserService {
     constructor() {
         this.prisma = new client_1.PrismaClient();
@@ -174,38 +175,47 @@ class AuthUserService {
             }
         });
     }
-    forgotPasswordUser(email) {
+    forgotPassword(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.prisma.user.findUnique({ where: { email } });
             if (!user) {
                 throw new Error("User not found");
             }
-            const resetToken = jsonwebtoken_1.default.sign({ userId: user.id }, process.env.JWT_KEY, {
+            const resetToken = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_KEY, {
                 expiresIn: "1h",
             });
+            const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/user/reset-password?token=${resetToken}`;
             yield (0, email_1.sendEmail)({
                 to: email,
-                subject: "Reset your password",
-                text: `Click here to reset your password: ${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`,
+                subject: "Reset Password Anda - RekJobs",
+                html: (0, resetPasswordEmail_1.resetPasswordEmailTemplate)(resetLink),
+                text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
             });
             return {
-                message: "Password reset email sent",
+                message: "Email reset password berhasil dikirim",
             };
         });
     }
-    resetPasswordUser(token, password) {
+    resetPassword(token, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
             const user = yield this.prisma.user.findUnique({
-                where: { id: parseInt(decoded.userId) },
+                where: { id: decoded.id },
             });
             if (!user) {
                 throw new Error("User not found");
             }
+            if (!user.resetPasswordToken || user.resetPasswordToken !== token) {
+                throw new Error("Invalid or expired reset token");
+            }
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
             yield this.prisma.user.update({
                 where: { id: user.id },
-                data: { password: hashedPassword },
+                data: {
+                    password: hashedPassword,
+                    resetPasswordToken: null, // Clear the token after use
+                    resetPasswordExpires: null,
+                },
             });
             return {
                 message: "Password reset successfully",

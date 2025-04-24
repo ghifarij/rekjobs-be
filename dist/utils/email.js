@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendCompanyVerificationEmail = exports.sendUserVerificationEmail = exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const transporter = nodemailer_1.default.createTransport({
-    service: "gmail",
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || "587"),
+    secure: process.env.SMTP_SECURE === "true",
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
     },
 });
 const verificationEmailTemplate = (verificationLink) => `
@@ -85,13 +87,20 @@ const verificationEmailTemplate = (verificationLink) => `
 `;
 const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, text, html }) {
     try {
-        yield transporter.sendMail({
-            from: process.env.EMAIL_USER,
+        console.log("Attempting to send email to:", to);
+        console.log("Using SMTP configuration:", {
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            user: process.env.SMTP_USER,
+        });
+        const info = yield transporter.sendMail({
+            from: process.env.SMTP_FROM,
             to,
             subject,
             text,
             html,
         });
+        console.log("Email sent successfully:", info.messageId);
     }
     catch (error) {
         console.error("Error sending email:", error);
