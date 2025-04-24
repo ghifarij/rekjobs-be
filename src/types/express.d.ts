@@ -11,7 +11,7 @@ export type CompanyPayload = {
 declare global {
   namespace Express {
     export interface Request {
-      user?: UserPaylaod;
+      user?: UserPayload;
       company?: CompanyPayload;
     }
   }

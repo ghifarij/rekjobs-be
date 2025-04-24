@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { JobController } from "../controller/job/job.controller";
+import { JobController } from "../../controller/job/job.controller";
+import { verifyTokenUser } from "../../middleware/verify.user";
 
 export class JobRouter {
   public router: Router;
@@ -12,9 +13,9 @@ export class JobRouter {
   }
 
   private initializeRoutes() {
-    this.router.get("/", this.jobController.getAllJobs);
+    this.router.get("/", verifyTokenUser, this.jobController.getAllJobs);
 
-    this.router.get("/:slug", this.jobController.getJobBySlug);
+    this.router.get("/:slug", verifyTokenUser, this.jobController.getJobBySlug);
   }
 
   public getRouter(): Router {

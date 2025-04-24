@@ -84,6 +84,16 @@ export const JobType: {
 
 export type JobType = (typeof JobType)[keyof typeof JobType]
 
+
+export const CompanySize: {
+  MICRO: 'MICRO',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE'
+};
+
+export type CompanySize = (typeof CompanySize)[keyof typeof CompanySize]
+
 }
 
 export type ApplicationStatus = $Enums.ApplicationStatus
@@ -97,6 +107,10 @@ export const InterviewStatus: typeof $Enums.InterviewStatus
 export type JobType = $Enums.JobType
 
 export const JobType: typeof $Enums.JobType
+
+export type CompanySize = $Enums.CompanySize
+
+export const CompanySize: typeof $Enums.CompanySize
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2921,7 +2935,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
@@ -2941,7 +2955,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
@@ -3138,7 +3152,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date
     updatedAt: Date
     isVerified: boolean
@@ -3272,7 +3286,7 @@ export namespace Prisma {
       logo: string | null
       location: string | null
       industry: string | null
-      size: string | null
+      size: $Enums.CompanySize | null
       createdAt: Date
       updatedAt: Date
       isVerified: boolean
@@ -3713,7 +3727,7 @@ export namespace Prisma {
     readonly logo: FieldRef<"Company", 'String'>
     readonly location: FieldRef<"Company", 'String'>
     readonly industry: FieldRef<"Company", 'String'>
-    readonly size: FieldRef<"Company", 'String'>
+    readonly size: FieldRef<"Company", 'CompanySize'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
     readonly isVerified: FieldRef<"Company", 'Boolean'>
@@ -10259,6 +10273,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'CompanySize'
+   */
+  export type EnumCompanySizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanySize'>
+    
+
+
+  /**
+   * Reference to a field of type 'CompanySize[]'
+   */
+  export type ListEnumCompanySizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanySize[]'>
+    
+
+
+  /**
    * Reference to a field of type 'JobType'
    */
   export type EnumJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobType'>
@@ -10443,7 +10471,7 @@ export namespace Prisma {
     logo?: StringNullableFilter<"Company"> | string | null
     location?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
-    size?: StringNullableFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     isVerified?: BoolFilter<"Company"> | boolean
@@ -10489,7 +10517,7 @@ export namespace Prisma {
     logo?: StringNullableFilter<"Company"> | string | null
     location?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
-    size?: StringNullableFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     isVerified?: BoolFilter<"Company"> | boolean
@@ -10537,7 +10565,7 @@ export namespace Prisma {
     logo?: StringNullableWithAggregatesFilter<"Company"> | string | null
     location?: StringNullableWithAggregatesFilter<"Company"> | string | null
     industry?: StringNullableWithAggregatesFilter<"Company"> | string | null
-    size?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableWithAggregatesFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     isVerified?: BoolWithAggregatesFilter<"Company"> | boolean
@@ -11115,7 +11143,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11136,7 +11164,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11156,7 +11184,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11177,7 +11205,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11198,7 +11226,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11217,7 +11245,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11237,7 +11265,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11955,6 +11983,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumCompanySizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableFilter<$PrismaModel> | $Enums.CompanySize | null
+  }
+
   export type JobListRelationFilter = {
     every?: JobWhereInput
     some?: JobWhereInput
@@ -12031,6 +12066,16 @@ export namespace Prisma {
 
   export type CompanySumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumCompanySizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CompanySize | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+    _max?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
   }
 
   export type EnumJobTypeFilter<$PrismaModel = never> = {
@@ -12541,6 +12586,10 @@ export namespace Prisma {
     connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
   }
 
+  export type NullableEnumCompanySizeFieldUpdateOperationsInput = {
+    set?: $Enums.CompanySize | null
+  }
+
   export type JobUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<JobCreateWithoutCompanyInput, JobUncheckedCreateWithoutCompanyInput> | JobCreateWithoutCompanyInput[] | JobUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: JobCreateOrConnectWithoutCompanyInput | JobCreateOrConnectWithoutCompanyInput[]
@@ -12923,6 +12972,23 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumCompanySizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableFilter<$PrismaModel> | $Enums.CompanySize | null
+  }
+
+  export type NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CompanySize | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+    _max?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumJobTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.JobType | EnumJobTypeFieldRefInput<$PrismaModel>
     in?: $Enums.JobType[] | ListEnumJobTypeFieldRefInput<$PrismaModel>
@@ -13259,7 +13325,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -13279,7 +13345,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -13345,7 +13411,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -13365,7 +13431,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean

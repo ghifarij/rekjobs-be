@@ -111,4 +111,25 @@ export class CompanyJobController {
       next(error);
     }
   };
+
+  public getJobById: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const companyId = req.company?.id;
+      const jobId = parseInt(req.params.id);
+      if (!companyId) throw new Error("Company ID not found");
+
+      const job = await this.jobService.getJobById(jobId, companyId);
+      if (!job) {
+        res.status(404).json({ message: "Job not found or unauthorized" });
+        return;
+      }
+      res.json(job);
+    } catch (err) {
+      next(err);
+    }
+  };
 }

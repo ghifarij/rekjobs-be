@@ -98,31 +98,34 @@ export class JobService {
     }
   }
 
-  public async getAllJobs(): Promise<Job[]> {
-    try {
-      // Fetch jobs that are active and include minimal company details (if needed)
-      const jobs = await prisma.job.findMany({
-        where: {
-          isActive: true,
-        },
-        include: {
-          company: {
-            select: {
-              id: true,
-              name: true,
-              logo: true,
-              email: true,
-            },
+  public async getAllJobs(search?: string): Promise<Job[]> {
+    const where: any = { isActive: true };
+
+    if (search) {
+      const q = search.trim();
+      where.OR = [
+        { title: { contains: q, mode: "insensitive" } },
+        { location: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+      ];
+    }
+
+    return prisma.job.findMany({
+      where,
+      include: {
+        company: {
+          select: {
+            id: true,
+            name: true,
+            logo: true,
+            email: true,
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-      return jobs;
-    } catch (error) {
-      throw error;
-    }
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }
 
   // Get a detailed view of a single job for the user/applicant
@@ -145,6 +148,28 @@ export class JobService {
           },
         },
       });
+      return job;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getJobById(
+    jobId: number,
+    companyId: number
+  ): Promise<Job | null> {
+    try {
+      const job = await prisma.job.findUnique({
+        where: { id: jobId },
+        include: {
+          applications: true,
+          company: true,
+        },
+      });
+      // Ensure the job belongs to the requesting company
+      if (!job || job.companyId !== companyId) {
+        return null;
+      }
       return job;
     } catch (error) {
       throw error;

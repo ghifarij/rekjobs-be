@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AuthUserController } from "../controller/auth/authUser.controller";
+import { AuthUserController } from "../../controller/auth/authUser.controller";
 
 export class AuthUserRouter {
   public router: Router;
@@ -18,6 +18,10 @@ export class AuthUserRouter {
 
     // Email Verification
     this.router.post("/verify", this.authUserController.verifyUser);
+    this.router.post(
+      "/check-verification",
+      this.authUserController.checkVerificationStatus
+    );
 
     // Social Login
     this.router.post("/social-login", this.authUserController.socialLogin);

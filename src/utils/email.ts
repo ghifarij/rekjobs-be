@@ -62,17 +62,17 @@ const verificationEmailTemplate = (verificationLink: string) => `
         <h1>Welcome to RekJobs!</h1>
     </div>
     <div class="content">
-        <h2>Email Verification Required</h2>
-        <p>Thank you for registering with RekJobs! To complete your registration and access all features, please verify your email address.</p>
-        <p>This step ensures the security of your account and helps us maintain a trusted community of job seekers and employers.</p>
+        <h2>Verifikasi Email Diperlukan</h2>
+        <p>Terima kasih telah mendaftar di RekJobs! Untuk menyelesaikan pendaftaran Anda dan mengakses semua fitur, silakan verifikasi alamat email Anda.</p>
+        <p>Langkah ini memastikan keamanan akun Anda dan membantu kami menjaga komunitas yang dipercayai antara pencari kerja dan pemberi kerja.</p>
         <div style="text-align: center;">
-            <a href="${verificationLink}" class="button">Verify Your Email</a>
+            <a href="${verificationLink}" class="button">Verifikasi Email Anda</a>
         </div>
-        <p>This verification link will expire in 1 hour for security reasons.</p>
+        <p>Link verifikasi ini akan kedaluwarsa dalam 1 jam untuk alasan keamanan.</p>
     </div>
     <div class="footer">
-        <p>If you didn't create an account with RekJobs, please ignore this email.</p>
-        <p>© 2024 RekJobs. All rights reserved.</p>
+        <p>Jika Anda tidak membuat akun di RekJobs, silakan abaikan email ini.</p>
+        <p>© 2024 RekJobs. Semua hak dilindungi.</p>
     </div>
 </body>
 </html>
@@ -93,11 +93,23 @@ export const sendEmail = async ({ to, subject, text, html }: EmailOptions) => {
   }
 };
 
-export const sendVerificationEmail = async (to: string, token: string) => {
+export const sendUserVerificationEmail = async (to: string, token: string) => {
   const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/user/verify-user/${token}`;
   await sendEmail({
     to,
-    subject: "Verify Your RekJobs Account",
+    subject: "Verifikasi Akun RekJobs",
+    html: verificationEmailTemplate(verificationLink),
+  });
+};
+
+export const sendCompanyVerificationEmail = async (
+  to: string,
+  token: string
+) => {
+  const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/verify-company/${token}`;
+  await sendEmail({
+    to,
+    subject: "Verifikasi Akun RekJobs",
     html: verificationEmailTemplate(verificationLink),
   });
 };

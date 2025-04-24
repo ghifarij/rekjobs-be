@@ -1,8 +1,8 @@
-import { PrismaClient } from "../../prisma/generated/client";
+import { CompanySize, PrismaClient } from "../../prisma/generated/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-import { sendEmail, sendVerificationEmail } from "../utils/email";
+import { sendEmail, sendCompanyVerificationEmail } from "../utils/email";
 
 export class AuthCompanyService {
   private prisma: PrismaClient;
@@ -66,7 +66,7 @@ export class AuthCompanyService {
       },
     });
 
-    await sendVerificationEmail(email, verificationToken);
+    await sendCompanyVerificationEmail(email, verificationToken);
 
     return {
       message: "Verification email sent",
@@ -82,22 +82,22 @@ export class AuthCompanyService {
       website?: string;
       location?: string;
       industry?: string;
-      size?: string;
+      size?: CompanySize;
     }
   ) {
     const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
       email: string;
     };
-    const company = await this.prisma.company.findUnique({
-      where: { email: decoded.email },
+    const company = await this.prisma.company.findFirst({
+      where: {
+        email: decoded.email,
+        verificationToken: token,
+        isVerified: false,
+      },
     });
 
     if (!company) {
-      throw new Error("Company not found");
-    }
-
-    if (company.isVerified) {
-      throw new Error("Company already verified");
+      throw new Error("Invalid or expired verification token");
     }
 
     const hashedPassword = await bcrypt.hash(companyData.password, 10);
@@ -113,6 +113,7 @@ export class AuthCompanyService {
         location: companyData.location || null,
         industry: companyData.industry || null,
         size: companyData.size || null,
+        verificationToken: null, // Clear the verification token after successful verification
       },
     });
 
@@ -242,10 +243,10 @@ export class AuthCompanyService {
 
   public async resetPasswordCompany(token: string, password: string) {
     const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
-      id: string;
+      id: number;
     };
     const company = await this.prisma.company.findUnique({
-      where: { id: parseInt(decoded.id) },
+      where: { id: decoded.id },
     });
 
     if (!company) {
@@ -253,6 +254,7 @@ export class AuthCompanyService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await this.prisma.company.update({
       where: { id: company.id },
       data: { password: hashedPassword },
@@ -260,6 +262,24 @@ export class AuthCompanyService {
 
     return {
       message: "Password reset successfully",
+    };
+  }
+
+  public async checkVerificationStatus(token: string) {
+    const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
+      email: string;
+    };
+    const company = await this.prisma.company.findUnique({
+      where: { email: decoded.email },
+    });
+
+    if (!company) {
+      throw new Error("Company not found");
+    }
+
+    return {
+      isVerified: company.isVerified,
+      email: company.email,
     };
   }
 }

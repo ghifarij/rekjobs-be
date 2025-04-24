@@ -122,4 +122,20 @@ export class AuthCompanyController {
       next(error);
     }
   };
+
+  public checkVerificationStatus: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { token } = req.body;
+      const result = await this.authCompanyService.checkVerificationStatus(
+        token
+      );
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

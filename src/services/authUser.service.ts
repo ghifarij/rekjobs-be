@@ -2,7 +2,7 @@ import { PrismaClient } from "../../prisma/generated/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-import { sendEmail, sendVerificationEmail } from "../utils/email";
+import { sendEmail, sendUserVerificationEmail } from "../utils/email";
 
 export class AuthUserService {
   private prisma: PrismaClient;
@@ -66,7 +66,7 @@ export class AuthUserService {
       },
     });
 
-    await sendVerificationEmail(email, verificationToken);
+    await sendUserVerificationEmail(email, verificationToken);
 
     return {
       message: "Verification email sent",
@@ -252,6 +252,24 @@ export class AuthUserService {
 
     return {
       message: "Password reset successfully",
+    };
+  }
+
+  public async checkVerificationStatus(token: string) {
+    const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
+      email: string;
+    };
+    const user = await this.prisma.user.findUnique({
+      where: { email: decoded.email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return {
+      isVerified: user.isVerified,
+      email: user.email,
     };
   }
 }

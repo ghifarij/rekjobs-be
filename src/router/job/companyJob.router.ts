@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { CompanyJobController } from "../controller/job/companyJob.controller";
-import { verifyTokenCompany } from "../middleware/verify.company";
+import { CompanyJobController } from "../../controller/job/companyJob.controller";
+import { verifyTokenCompany } from "../../middleware/verify.company";
 
 export class CompanyJobRouter {
   public router: Router;
@@ -22,6 +22,12 @@ export class CompanyJobRouter {
 
     // Get all jobs for the company
     this.router.get("/", verifyTokenCompany, this.companyJobController.getJobs);
+
+    this.router.get(
+      "/:id",
+      verifyTokenCompany,
+      this.companyJobController.getJobById
+    );
 
     // Update a job
     this.router.put(

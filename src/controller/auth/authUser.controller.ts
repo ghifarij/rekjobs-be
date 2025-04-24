@@ -106,4 +106,18 @@ export class AuthUserController {
       next(error);
     }
   };
+
+  public checkVerificationStatus: RequestHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { token } = req.body;
+      const result = await this.authUserService.checkVerificationStatus(token);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

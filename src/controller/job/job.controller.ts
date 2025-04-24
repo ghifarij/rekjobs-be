@@ -11,16 +11,19 @@ export class JobController {
   }
 
   // Get all active jobs for the public job board/home page
-  public getAllJobs: RequestHandler = async (
+  public getAllJobs = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      const jobs = await this.jobService.getAllJobs();
-      res.status(200).json(jobs);
-    } catch (error) {
-      next(error);
+      const { search } = req.query;
+      const jobs = await this.jobService.getAllJobs(
+        typeof search === "string" && search.length > 0 ? search : undefined
+      );
+      res.json(jobs);
+    } catch (err) {
+      next(err);
     }
   };
 

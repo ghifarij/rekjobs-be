@@ -235,6 +235,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.CompanySize = exports.$Enums.CompanySize = {
+  MICRO: 'MICRO',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE'
+};
+
 exports.JobType = exports.$Enums.JobType = {
   FULL_TIME: 'FULL_TIME',
   PART_TIME: 'PART_TIME',
