@@ -18,6 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const google_auth_library_1 = require("google-auth-library");
 const email_1 = require("../utils/email");
+const resetPasswordEmail_1 = require("../utils/resetPasswordEmail");
 class AuthCompanyService {
     constructor() {
         this.prisma = new client_1.PrismaClient();
@@ -189,13 +190,15 @@ class AuthCompanyService {
             const resetToken = jsonwebtoken_1.default.sign({ id: company.id }, process.env.JWT_KEY, {
                 expiresIn: "1h",
             });
+            const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/reset-password?token=${resetToken}`;
             yield (0, email_1.sendEmail)({
                 to: email,
-                subject: "Reset your password",
-                text: `Click here to reset your password: ${process.env.FRONTEND_URL}/company/reset-password?token=${resetToken}`,
+                subject: "Reset Password Anda - RekJobs",
+                html: (0, resetPasswordEmail_1.resetPasswordEmailTemplate)(resetLink),
+                text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
             });
             return {
-                message: "Password reset email sent",
+                message: "Email reset password berhasil dikirim",
             };
         });
     }
@@ -208,10 +211,17 @@ class AuthCompanyService {
             if (!company) {
                 throw new Error("Company not found");
             }
+            if (!company.resetPasswordToken || company.resetPasswordToken !== token) {
+                throw new Error("Invalid or expired reset token");
+            }
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
             yield this.prisma.company.update({
                 where: { id: company.id },
-                data: { password: hashedPassword },
+                data: {
+                    password: hashedPassword,
+                    resetPasswordToken: null, // Clear the token after use
+                    resetPasswordExpires: null,
+                },
             });
             return {
                 message: "Password reset successfully",

@@ -62,7 +62,7 @@ class AuthUserController {
         this.forgotPasswordUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email } = req.body;
-                const result = yield this.authUserService.forgotPasswordUser(email);
+                const result = yield this.authUserService.forgotPassword(email);
                 res.json(result);
             }
             catch (error) {
@@ -72,7 +72,7 @@ class AuthUserController {
         this.resetPasswordUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { token, password } = req.body;
-                const result = yield this.authUserService.resetPasswordUser(token, password);
+                const result = yield this.authUserService.resetPassword(token, password);
                 res.json(result);
             }
             catch (error) {

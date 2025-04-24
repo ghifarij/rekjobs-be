@@ -83,7 +83,7 @@ export class AuthUserController {
   ) => {
     try {
       const { email } = req.body;
-      const result = await this.authUserService.forgotPasswordUser(email);
+      const result = await this.authUserService.forgotPassword(email);
       res.json(result);
     } catch (error) {
       next(error);
@@ -97,10 +97,7 @@ export class AuthUserController {
   ) => {
     try {
       const { token, password } = req.body;
-      const result = await this.authUserService.resetPasswordUser(
-        token,
-        password
-      );
+      const result = await this.authUserService.resetPassword(token, password);
       res.json(result);
     } catch (error) {
       next(error);
