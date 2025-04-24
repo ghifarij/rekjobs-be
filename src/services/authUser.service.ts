@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import { sendEmail, sendUserVerificationEmail } from "../utils/email";
+import { resetPasswordEmailTemplate } from "../utils/resetPasswordEmail";
 
 export class AuthUserService {
   private prisma: PrismaClient;
@@ -211,43 +212,55 @@ export class AuthUserService {
     }
   }
 
-  public async forgotPasswordUser(email: string) {
+  public async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw new Error("User not found");
     }
 
-    const resetToken = jwt.sign({ userId: user.id }, process.env.JWT_KEY!, {
+    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_KEY!, {
       expiresIn: "1h",
     });
 
+    const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/user/reset-password?token=${resetToken}`;
+
     await sendEmail({
       to: email,
-      subject: "Reset your password",
-      text: `Click here to reset your password: ${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`,
+      subject: "Reset Password Anda - RekJobs",
+      html: resetPasswordEmailTemplate(resetLink),
+      text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
     });
 
     return {
-      message: "Password reset email sent",
+      message: "Email reset password berhasil dikirim",
     };
   }
 
-  public async resetPasswordUser(token: string, password: string) {
+  public async resetPassword(token: string, password: string) {
     const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
-      userId: string;
+      id: number;
     };
     const user = await this.prisma.user.findUnique({
-      where: { id: parseInt(decoded.userId) },
+      where: { id: decoded.id },
     });
 
     if (!user) {
       throw new Error("User not found");
     }
 
+    if (!user.resetPasswordToken || user.resetPasswordToken !== token) {
+      throw new Error("Invalid or expired reset token");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { password: hashedPassword },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null, // Clear the token after use
+        resetPasswordExpires: null,
+      },
     });
 
     return {

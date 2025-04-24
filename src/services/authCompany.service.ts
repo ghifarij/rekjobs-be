@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import { sendEmail, sendCompanyVerificationEmail } from "../utils/email";
+import { resetPasswordEmailTemplate } from "../utils/resetPasswordEmail";
 
 export class AuthCompanyService {
   private prisma: PrismaClient;
@@ -230,14 +231,17 @@ export class AuthCompanyService {
       expiresIn: "1h",
     });
 
+    const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/reset-password?token=${resetToken}`;
+
     await sendEmail({
       to: email,
-      subject: "Reset your password",
-      text: `Click here to reset your password: ${process.env.FRONTEND_URL}/company/reset-password?token=${resetToken}`,
+      subject: "Reset Password Anda - RekJobs",
+      html: resetPasswordEmailTemplate(resetLink),
+      text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
     });
 
     return {
-      message: "Password reset email sent",
+      message: "Email reset password berhasil dikirim",
     };
   }
 
@@ -253,11 +257,19 @@ export class AuthCompanyService {
       throw new Error("Company not found");
     }
 
+    if (!company.resetPasswordToken || company.resetPasswordToken !== token) {
+      throw new Error("Invalid or expired reset token");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await this.prisma.company.update({
       where: { id: company.id },
-      data: { password: hashedPassword },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null, // Clear the token after use
+        resetPasswordExpires: null,
+      },
     });
 
     return {

@@ -8,10 +8,12 @@ interface EmailOptions {
 }
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT || "587"),
+  secure: process.env.SMTP_SECURE === "true",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
@@ -80,13 +82,22 @@ const verificationEmailTemplate = (verificationLink: string) => `
 
 export const sendEmail = async ({ to, subject, text, html }: EmailOptions) => {
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    console.log("Attempting to send email to:", to);
+    console.log("Using SMTP configuration:", {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      user: process.env.SMTP_USER,
+    });
+
+    const info = await transporter.sendMail({
+      from: process.env.SMTP_FROM,
       to,
       subject,
       text,
       html,
     });
+
+    console.log("Email sent successfully:", info.messageId);
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send email");
