@@ -31,30 +31,31 @@ model User {
 }
 
 model Company {
-  id                   Int       @id @default(autoincrement())
-  email                String    @unique
+  id                   Int          @id @default(autoincrement())
+  email                String       @unique
   password             String
   name                 String
   description          String?
   website              String?
-  logo                 String?   @default("https://res.cloudinary.com/dkyco4yqp/image/upload/v1738487804/user-circle-svgrepo-com_az7hcs.png")
+  logo                 String?      @default("https://res.cloudinary.com/dkyco4yqp/image/upload/v1738487804/user-circle-svgrepo-com_az7hcs.png")
   location             String?
   industry             String?
-  size                 String?
+  size                 CompanySize?
   jobs                 Job[]
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  isVerified           Boolean   @default(false)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  isVerified           Boolean      @default(false)
   verificationToken    String?
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
-  googleId             String?   @unique
+  googleId             String?      @unique
 }
 
 model Job {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
+  slug         String        @unique
   location     String
   requirements String
   salary       String?
@@ -145,4 +146,11 @@ enum JobType {
   CONTRACT
   INTERNSHIP
   REMOTE
+}
+
+enum CompanySize {
+  MICRO // Usaha Mikro (UMKM Mikro)
+  SMALL // Usaha Kecil (UMKM Kecil)
+  MEDIUM // Usaha Menengah (UMKM Menengah)
+  LARGE // Perusahaan Besar / Korporasi
 }

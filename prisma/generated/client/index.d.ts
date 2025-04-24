@@ -84,6 +84,16 @@ export const JobType: {
 
 export type JobType = (typeof JobType)[keyof typeof JobType]
 
+
+export const CompanySize: {
+  MICRO: 'MICRO',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE'
+};
+
+export type CompanySize = (typeof CompanySize)[keyof typeof CompanySize]
+
 }
 
 export type ApplicationStatus = $Enums.ApplicationStatus
@@ -97,6 +107,10 @@ export const InterviewStatus: typeof $Enums.InterviewStatus
 export type JobType = $Enums.JobType
 
 export const JobType: typeof $Enums.JobType
+
+export type CompanySize = $Enums.CompanySize
+
+export const CompanySize: typeof $Enums.CompanySize
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2921,7 +2935,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
@@ -2941,7 +2955,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
@@ -3138,7 +3152,7 @@ export namespace Prisma {
     logo: string | null
     location: string | null
     industry: string | null
-    size: string | null
+    size: $Enums.CompanySize | null
     createdAt: Date
     updatedAt: Date
     isVerified: boolean
@@ -3272,7 +3286,7 @@ export namespace Prisma {
       logo: string | null
       location: string | null
       industry: string | null
-      size: string | null
+      size: $Enums.CompanySize | null
       createdAt: Date
       updatedAt: Date
       isVerified: boolean
@@ -3713,7 +3727,7 @@ export namespace Prisma {
     readonly logo: FieldRef<"Company", 'String'>
     readonly location: FieldRef<"Company", 'String'>
     readonly industry: FieldRef<"Company", 'String'>
-    readonly size: FieldRef<"Company", 'String'>
+    readonly size: FieldRef<"Company", 'CompanySize'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
     readonly isVerified: FieldRef<"Company", 'Boolean'>
@@ -4177,6 +4191,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     description: string | null
+    slug: string | null
     location: string | null
     requirements: string | null
     salary: string | null
@@ -4193,6 +4208,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     description: string | null
+    slug: string | null
     location: string | null
     requirements: string | null
     salary: string | null
@@ -4209,6 +4225,7 @@ export namespace Prisma {
     id: number
     title: number
     description: number
+    slug: number
     location: number
     requirements: number
     salary: number
@@ -4237,6 +4254,7 @@ export namespace Prisma {
     id?: true
     title?: true
     description?: true
+    slug?: true
     location?: true
     requirements?: true
     salary?: true
@@ -4253,6 +4271,7 @@ export namespace Prisma {
     id?: true
     title?: true
     description?: true
+    slug?: true
     location?: true
     requirements?: true
     salary?: true
@@ -4269,6 +4288,7 @@ export namespace Prisma {
     id?: true
     title?: true
     description?: true
+    slug?: true
     location?: true
     requirements?: true
     salary?: true
@@ -4372,6 +4392,7 @@ export namespace Prisma {
     id: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary: string | null
@@ -4407,6 +4428,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
+    slug?: boolean
     location?: boolean
     requirements?: boolean
     salary?: boolean
@@ -4426,6 +4448,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
+    slug?: boolean
     location?: boolean
     requirements?: boolean
     salary?: boolean
@@ -4443,6 +4466,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
+    slug?: boolean
     location?: boolean
     requirements?: boolean
     salary?: boolean
@@ -4460,6 +4484,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
+    slug?: boolean
     location?: boolean
     requirements?: boolean
     salary?: boolean
@@ -4472,7 +4497,7 @@ export namespace Prisma {
     isActive?: boolean
   }
 
-  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "requirements" | "salary" | "jobType" | "experience" | "deadline" | "companyId" | "createdAt" | "updatedAt" | "isActive", ExtArgs["result"]["job"]>
+  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "slug" | "location" | "requirements" | "salary" | "jobType" | "experience" | "deadline" | "companyId" | "createdAt" | "updatedAt" | "isActive", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     applications?: boolean | Job$applicationsArgs<ExtArgs>
@@ -4495,6 +4520,7 @@ export namespace Prisma {
       id: number
       title: string
       description: string
+      slug: string
       location: string
       requirements: string
       salary: string | null
@@ -4933,6 +4959,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Job", 'Int'>
     readonly title: FieldRef<"Job", 'String'>
     readonly description: FieldRef<"Job", 'String'>
+    readonly slug: FieldRef<"Job", 'String'>
     readonly location: FieldRef<"Job", 'String'>
     readonly requirements: FieldRef<"Job", 'String'>
     readonly salary: FieldRef<"Job", 'String'>
@@ -10090,6 +10117,7 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     description: 'description',
+    slug: 'slug',
     location: 'location',
     requirements: 'requirements',
     salary: 'salary',
@@ -10241,6 +10269,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'CompanySize'
+   */
+  export type EnumCompanySizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanySize'>
+    
+
+
+  /**
+   * Reference to a field of type 'CompanySize[]'
+   */
+  export type ListEnumCompanySizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompanySize[]'>
     
 
 
@@ -10429,7 +10471,7 @@ export namespace Prisma {
     logo?: StringNullableFilter<"Company"> | string | null
     location?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
-    size?: StringNullableFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     isVerified?: BoolFilter<"Company"> | boolean
@@ -10475,7 +10517,7 @@ export namespace Prisma {
     logo?: StringNullableFilter<"Company"> | string | null
     location?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
-    size?: StringNullableFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     isVerified?: BoolFilter<"Company"> | boolean
@@ -10523,7 +10565,7 @@ export namespace Prisma {
     logo?: StringNullableWithAggregatesFilter<"Company"> | string | null
     location?: StringNullableWithAggregatesFilter<"Company"> | string | null
     industry?: StringNullableWithAggregatesFilter<"Company"> | string | null
-    size?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    size?: EnumCompanySizeNullableWithAggregatesFilter<"Company"> | $Enums.CompanySize | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     isVerified?: BoolWithAggregatesFilter<"Company"> | boolean
@@ -10540,6 +10582,7 @@ export namespace Prisma {
     id?: IntFilter<"Job"> | number
     title?: StringFilter<"Job"> | string
     description?: StringFilter<"Job"> | string
+    slug?: StringFilter<"Job"> | string
     location?: StringFilter<"Job"> | string
     requirements?: StringFilter<"Job"> | string
     salary?: StringNullableFilter<"Job"> | string | null
@@ -10558,6 +10601,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    slug?: SortOrder
     location?: SortOrder
     requirements?: SortOrder
     salary?: SortOrderInput | SortOrder
@@ -10574,6 +10618,7 @@ export namespace Prisma {
 
   export type JobWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    slug?: string
     AND?: JobWhereInput | JobWhereInput[]
     OR?: JobWhereInput[]
     NOT?: JobWhereInput | JobWhereInput[]
@@ -10591,12 +10636,13 @@ export namespace Prisma {
     isActive?: BoolFilter<"Job"> | boolean
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     applications?: ApplicationListRelationFilter
-  }, "id">
+  }, "id" | "slug">
 
   export type JobOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    slug?: SortOrder
     location?: SortOrder
     requirements?: SortOrder
     salary?: SortOrderInput | SortOrder
@@ -10621,6 +10667,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Job"> | number
     title?: StringWithAggregatesFilter<"Job"> | string
     description?: StringWithAggregatesFilter<"Job"> | string
+    slug?: StringWithAggregatesFilter<"Job"> | string
     location?: StringWithAggregatesFilter<"Job"> | string
     requirements?: StringWithAggregatesFilter<"Job"> | string
     salary?: StringNullableWithAggregatesFilter<"Job"> | string | null
@@ -11096,7 +11143,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11117,7 +11164,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11137,7 +11184,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11158,7 +11205,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11179,7 +11226,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -11198,7 +11245,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11218,7 +11265,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -11231,6 +11278,7 @@ export namespace Prisma {
   export type JobCreateInput = {
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -11248,6 +11296,7 @@ export namespace Prisma {
     id?: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -11264,6 +11313,7 @@ export namespace Prisma {
   export type JobUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11281,6 +11331,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11298,6 +11349,7 @@ export namespace Prisma {
     id?: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -11313,6 +11365,7 @@ export namespace Prisma {
   export type JobUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11328,6 +11381,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11929,6 +11983,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumCompanySizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableFilter<$PrismaModel> | $Enums.CompanySize | null
+  }
+
   export type JobListRelationFilter = {
     every?: JobWhereInput
     some?: JobWhereInput
@@ -12007,6 +12068,16 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type EnumCompanySizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CompanySize | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+    _max?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+  }
+
   export type EnumJobTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.JobType | EnumJobTypeFieldRefInput<$PrismaModel>
     in?: $Enums.JobType[] | ListEnumJobTypeFieldRefInput<$PrismaModel>
@@ -12023,6 +12094,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    slug?: SortOrder
     location?: SortOrder
     requirements?: SortOrder
     salary?: SortOrder
@@ -12044,6 +12116,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    slug?: SortOrder
     location?: SortOrder
     requirements?: SortOrder
     salary?: SortOrder
@@ -12060,6 +12133,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    slug?: SortOrder
     location?: SortOrder
     requirements?: SortOrder
     salary?: SortOrder
@@ -12512,6 +12586,10 @@ export namespace Prisma {
     connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
   }
 
+  export type NullableEnumCompanySizeFieldUpdateOperationsInput = {
+    set?: $Enums.CompanySize | null
+  }
+
   export type JobUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<JobCreateWithoutCompanyInput, JobUncheckedCreateWithoutCompanyInput> | JobCreateWithoutCompanyInput[] | JobUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: JobCreateOrConnectWithoutCompanyInput | JobCreateOrConnectWithoutCompanyInput[]
@@ -12894,6 +12972,23 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumCompanySizeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableFilter<$PrismaModel> | $Enums.CompanySize | null
+  }
+
+  export type NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompanySize | EnumCompanySizeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CompanySize[] | ListEnumCompanySizeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCompanySizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CompanySize | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+    _max?: NestedEnumCompanySizeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumJobTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.JobType | EnumJobTypeFieldRefInput<$PrismaModel>
     in?: $Enums.JobType[] | ListEnumJobTypeFieldRefInput<$PrismaModel>
@@ -13145,6 +13240,7 @@ export namespace Prisma {
   export type JobCreateWithoutCompanyInput = {
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -13161,6 +13257,7 @@ export namespace Prisma {
     id?: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -13206,6 +13303,7 @@ export namespace Prisma {
     id?: IntFilter<"Job"> | number
     title?: StringFilter<"Job"> | string
     description?: StringFilter<"Job"> | string
+    slug?: StringFilter<"Job"> | string
     location?: StringFilter<"Job"> | string
     requirements?: StringFilter<"Job"> | string
     salary?: StringNullableFilter<"Job"> | string | null
@@ -13227,7 +13325,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -13247,7 +13345,7 @@ export namespace Prisma {
     logo?: string | null
     location?: string | null
     industry?: string | null
-    size?: string | null
+    size?: $Enums.CompanySize | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
@@ -13313,7 +13411,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -13333,7 +13431,7 @@ export namespace Prisma {
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
-    size?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -13362,6 +13460,7 @@ export namespace Prisma {
   export type JobCreateWithoutApplicationsInput = {
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -13378,6 +13477,7 @@ export namespace Prisma {
     id?: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -13480,6 +13580,7 @@ export namespace Prisma {
   export type JobUpdateWithoutApplicationsInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13496,6 +13597,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13980,6 +14082,7 @@ export namespace Prisma {
     id?: number
     title: string
     description: string
+    slug: string
     location: string
     requirements: string
     salary?: string | null
@@ -13994,6 +14097,7 @@ export namespace Prisma {
   export type JobUpdateWithoutCompanyInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14010,6 +14114,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14026,6 +14131,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     requirements?: StringFieldUpdateOperationsInput | string
     salary?: NullableStringFieldUpdateOperationsInput | string | null

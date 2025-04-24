@@ -11,6 +11,6 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "sourceMap": true
   },
-  "include": ["src/**/*.ts", "src/custom.d.ts", "src/index.ts"],
+  "include": ["src/**/*.ts", "src/custom.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
