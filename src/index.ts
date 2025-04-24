@@ -20,15 +20,26 @@ import { UserInterviewRouter } from "./router/user/userInterview.router";
 dotenv.config();
 
 const PORT: number = 8000;
-const base_url_fe = process.env.NEXT_PUBLIC_BASE_URL_FE;
 export const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://rekjobs-fe.vercel.app",
+];
+
 app.use(
   cors({
-    origin: `${base_url_fe}`,
+    origin: (incomingOrigin, cb) => {
+      if (!incomingOrigin || allowedOrigins.includes(incomingOrigin)) {
+        cb(null, true);
+      } else {
+        cb(new Error(`Origin ${incomingOrigin} not allowed by CORS`));
+      }
+    },
     credentials: true,
   })
 );

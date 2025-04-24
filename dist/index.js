@@ -24,13 +24,23 @@ const userInterview_router_1 = require("./router/user/userInterview.router");
 // Load environment variables
 dotenv_1.default.config();
 const PORT = 8000;
-const base_url_fe = process.env.NEXT_PUBLIC_BASE_URL_FE;
 exports.upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://rekjobs-fe.vercel.app",
+];
 app.use((0, cors_1.default)({
-    origin: `${base_url_fe}`,
+    origin: (incomingOrigin, cb) => {
+        if (!incomingOrigin || allowedOrigins.includes(incomingOrigin)) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error(`Origin ${incomingOrigin} not allowed by CORS`));
+        }
+    },
     credentials: true,
 }));
 // Initialize routers
