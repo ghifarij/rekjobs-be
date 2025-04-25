@@ -81,7 +81,7 @@ class UserService {
             // Start a transaction to update user profile and related data
             const updated = yield this.prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
                 // Update user profile
-                const user = yield tx.user.update({
+                yield tx.user.update({
                     where: { id: userId },
                     data: updates,
                     select: {

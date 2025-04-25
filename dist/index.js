@@ -26,7 +26,7 @@ dotenv_1.default.config();
 const PORT = 8000;
 exports.upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: "2mb" }));
 app.use((0, cookie_parser_1.default)());
 const allowedOrigins = [
     "http://localhost:3000",
