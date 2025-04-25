@@ -23,7 +23,7 @@ const PORT: number = 8000;
 export const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 
 const allowedOrigins = [

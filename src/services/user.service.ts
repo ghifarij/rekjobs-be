@@ -160,7 +160,7 @@ export class UserService {
     // Start a transaction to update user profile and related data
     const updated = await this.prisma.$transaction(async (tx) => {
       // Update user profile
-      const user = await tx.user.update({
+      await tx.user.update({
         where: { id: userId },
         data: updates,
         select: {
