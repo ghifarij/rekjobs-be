@@ -109,7 +109,7 @@ export class EmailService {
 
     html += `
         <div style="margin-top: 24px; text-align: center;">
-          <a href="${process.env.FRONTEND_URL}/user/applied-jobs" 
+          <a href="https://rekjobs-fe.vercel.app/user/applied-jobs" 
              style="display: inline-block; background-color: #0284c7; color: white; padding: 12px 24px; 
                     text-decoration: none; border-radius: 6px; font-weight: 500; margin-bottom: 24px;">
             View Your Applications
