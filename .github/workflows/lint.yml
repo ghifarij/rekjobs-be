@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Format Generated Prisma Client
+        run: npx prettier --write prisma/generated/client
+
       - name: Check Formatting
         run: npm run format:check
 

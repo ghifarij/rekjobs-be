@@ -1,4 +1,9 @@
-import { PrismaClient, Job, JobType, Prisma } from '../../prisma/generated/client';
+import {
+  PrismaClient,
+  Job,
+  JobType,
+  Prisma,
+} from '../../prisma/generated/client';
 import slugify from 'slugify';
 
 const prisma = new PrismaClient();

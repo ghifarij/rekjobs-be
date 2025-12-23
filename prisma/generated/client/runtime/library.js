@@ -8069,7 +8069,7 @@ function xl(e) {
 }
 function Pl(e) {
   if (
-    e.generator?.previewFeatures.some((r) =>
+    !!e.generator?.previewFeatures.some((r) =>
       r.toLowerCase().includes('metrics'),
     )
   )
