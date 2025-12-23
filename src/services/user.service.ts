@@ -1,7 +1,7 @@
 // src/services/user.service.ts
-import { PrismaClient } from "../../prisma/generated/client";
-import prisma from "../prisma";
-import { hash } from "bcryptjs";
+import { PrismaClient } from '../../prisma/generated/client';
+import prisma from '../prisma';
+import { hash } from 'bcryptjs';
 
 export class UserService {
   private prisma = prisma as PrismaClient;
@@ -114,7 +114,7 @@ export class UserService {
         current: boolean;
         description?: string;
       }[];
-    }
+    },
   ): Promise<{
     id: number;
     email: string;
@@ -148,9 +148,7 @@ export class UserService {
     }[];
   }> {
     // clone the update payload
-    const updates: any = { ...data };
-    delete updates.experience;
-    delete updates.education;
+    const { experience: _experience, education: _education, ...updates } = data; // Destructure to remove relations from direct user update
 
     // if a new password is provided, hash it
     if (updates.password) {
@@ -255,6 +253,37 @@ export class UserService {
       });
     });
 
-    return updated as any;
+    return updated as unknown as {
+      id: number;
+      email: string;
+      name: string;
+      phone: string | null;
+      bio: string | null;
+      avatar: string | null;
+      skills: string[];
+      isVerified: boolean;
+      createdAt: Date;
+      updatedAt: Date;
+      experience: {
+        id: number;
+        title: string;
+        company: string;
+        location: string | null;
+        startDate: Date;
+        endDate: Date | null;
+        current: boolean;
+        description: string | null;
+      }[];
+      education: {
+        id: number;
+        school: string;
+        degree: string;
+        fieldOfStudy: string;
+        startDate: Date;
+        endDate: Date | null;
+        current: boolean;
+        description: string | null;
+      }[];
+    };
   }
 }

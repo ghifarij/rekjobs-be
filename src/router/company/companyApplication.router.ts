@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { CompanyApplicationController } from "../../controller/company/companyApplication.controller";
-import { verifyTokenCompany } from "../../middleware/verify.company";
+import { Router } from 'express';
+import { CompanyApplicationController } from '../../controller/company/companyApplication.controller';
+import { verifyTokenCompany } from '../../middleware/verify.company';
 
 export class CompanyApplicationRouter {
   public router: Router;
@@ -15,23 +15,23 @@ export class CompanyApplicationRouter {
   private initializeRoutes() {
     // Get all applications for a specific job (company)
     this.router.get(
-      "/",
+      '/',
       verifyTokenCompany,
-      this.companyApplicationController.getCompanyApplications
+      this.companyApplicationController.getCompanyApplications,
     );
 
     // Get a single application by ID (user or company)
     this.router.get(
-      "/:id",
+      '/:id',
       verifyTokenCompany,
-      this.companyApplicationController.getApplicationById
+      this.companyApplicationController.getApplicationById,
     );
 
     // Update application status (company)
     this.router.patch(
-      "/:id/status",
+      '/:id/status',
       verifyTokenCompany,
-      this.companyApplicationController.updateApplicationStatus
+      this.companyApplicationController.updateApplicationStatus,
     );
   }
 

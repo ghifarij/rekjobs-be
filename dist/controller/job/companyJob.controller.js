@@ -18,7 +18,7 @@ class CompanyJobController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const jobData = {
                     title: req.body.title,
@@ -42,7 +42,7 @@ class CompanyJobController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const jobId = parseInt(req.params.id);
                 const jobData = {
@@ -68,11 +68,11 @@ class CompanyJobController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const jobId = parseInt(req.params.id);
                 yield this.jobService.deleteJob(jobId, companyId);
-                res.json({ message: "Job deleted successfully" });
+                res.json({ message: 'Job deleted successfully' });
             }
             catch (error) {
                 next(error);
@@ -83,7 +83,7 @@ class CompanyJobController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const jobs = yield this.jobService.getCompanyJobs(companyId);
                 res.json(jobs);
@@ -98,10 +98,10 @@ class CompanyJobController {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 const jobId = parseInt(req.params.id);
                 if (!companyId)
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 const job = yield this.jobService.getJobById(jobId, companyId);
                 if (!job) {
-                    res.status(404).json({ message: "Job not found or unauthorized" });
+                    res.status(404).json({ message: 'Job not found or unauthorized' });
                     return;
                 }
                 res.json(job);

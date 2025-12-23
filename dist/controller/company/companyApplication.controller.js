@@ -20,7 +20,7 @@ class CompanyApplicationController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    res.status(401).json({ message: "Unauthorized" });
+                    res.status(401).json({ message: 'Unauthorized' });
                     return;
                 }
                 const applications = yield this.companyApplicationService.getCompanyApplications(companyId);
@@ -36,7 +36,7 @@ class CompanyApplicationController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    res.status(401).json({ message: "Unauthorized" });
+                    res.status(401).json({ message: 'Unauthorized' });
                     return;
                 }
                 const applicationId = parseInt(req.params.id, 10);
@@ -53,7 +53,7 @@ class CompanyApplicationController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    res.status(401).json({ message: "Unauthorized" });
+                    res.status(401).json({ message: 'Unauthorized' });
                     return;
                 }
                 const applicationId = parseInt(req.params.id, 10);

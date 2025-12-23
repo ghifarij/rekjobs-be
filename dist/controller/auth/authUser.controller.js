@@ -49,9 +49,9 @@ class AuthUserController {
         });
         this.socialLogin = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("Social login request body:", req.body);
+                console.log('Social login request body:', req.body);
                 const { googleId, email, name, picture } = req.body;
-                console.log("Extracted Google data:", { googleId, email, name, picture });
+                console.log('Extracted Google data:', { googleId, email, name, picture });
                 const result = yield this.authUserService.socialLogin(googleId, email, name, picture);
                 res.json(result);
             }

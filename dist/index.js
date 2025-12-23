@@ -26,11 +26,11 @@ dotenv_1.default.config();
 const PORT = 8000;
 exports.upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 const app = (0, express_1.default)();
-app.use(express_1.default.json({ limit: "2mb" }));
+app.use(express_1.default.json({ limit: '2mb' }));
 app.use((0, cookie_parser_1.default)());
 const allowedOrigins = [
-    "http://localhost:3000",
-    "https://rekjobs-fe.vercel.app",
+    'http://localhost:3000',
+    'https://rekjobs-fe.vercel.app',
 ];
 app.use((0, cors_1.default)({
     origin: (incomingOrigin, cb) => {
@@ -56,28 +56,28 @@ const companyApplicationRouter = new companyApplication_router_1.CompanyApplicat
 const companyInterviewRouter = new companyInterview_router_1.CompanyInterviewRouter();
 const userInterviewRouter = new userInterview_router_1.UserInterviewRouter();
 // Routes
-app.use("/api/auth/user", authUserRouter.getRouter());
-app.use("/api/auth/company", authCompanyRouter.getRouter());
-app.use("/api/auth/session", sessionRouter.getRouter());
-app.use("/api/company-jobs", companyJobRouter.getRouter());
-app.use("/api/jobs", jobRouter.getRouter());
-app.use("/api/company-profile", companyRouter.getRouter());
-app.use("/api/user-profile", userRouter.getRouter());
-app.use("/api/applications/user", userApplicationRouter.getRouter());
-app.use("/api/applications/company", companyApplicationRouter.getRouter());
-app.use("/api/interviews/company", companyInterviewRouter.getRouter());
-app.use("/api/interviews/user", userInterviewRouter.getRouter());
+app.use('/api/auth/user', authUserRouter.getRouter());
+app.use('/api/auth/company', authCompanyRouter.getRouter());
+app.use('/api/auth/session', sessionRouter.getRouter());
+app.use('/api/company-jobs', companyJobRouter.getRouter());
+app.use('/api/jobs', jobRouter.getRouter());
+app.use('/api/company-profile', companyRouter.getRouter());
+app.use('/api/user-profile', userRouter.getRouter());
+app.use('/api/applications/user', userApplicationRouter.getRouter());
+app.use('/api/applications/company', companyApplicationRouter.getRouter());
+app.use('/api/interviews/company', companyInterviewRouter.getRouter());
+app.use('/api/interviews/user', userInterviewRouter.getRouter());
 // Health check route
-app.get("/api", (req, res) => {
-    res.status(200).json({ status: "ok", message: "Welcome to RekJobs API" });
+app.get('/api', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'Welcome to RekJobs API' });
 });
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on -> http://localhost:${PORT}/api`);
 });
 // Handle unhandled promise rejections
-process.on("unhandledRejection", (err) => {
-    console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+process.on('unhandledRejection', (err) => {
+    console.log('UNHANDLED REJECTION! 💥 Shutting down...');
     console.log(err);
     process.exit(1);
 });

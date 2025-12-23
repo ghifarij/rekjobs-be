@@ -11,8 +11,8 @@ class CompanyRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get("/", verify_company_1.verifyTokenCompany, this.companyController.getProfile);
-        this.router.put("/", verify_company_1.verifyTokenCompany, this.companyController.updateProfile);
+        this.router.get('/', verify_company_1.verifyTokenCompany, this.companyController.getProfile);
+        this.router.put('/', verify_company_1.verifyTokenCompany, this.companyController.updateProfile);
     }
     getRouter() {
         return this.router;

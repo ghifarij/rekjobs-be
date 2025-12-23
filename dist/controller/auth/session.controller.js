@@ -20,30 +20,30 @@ class SessionController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const authHeader = req.headers.authorization;
-                if (!(authHeader === null || authHeader === void 0 ? void 0 : authHeader.startsWith("Bearer "))) {
-                    res.status(401).json({ message: "Unauthorized: No token provided" });
+                if (!(authHeader === null || authHeader === void 0 ? void 0 : authHeader.startsWith('Bearer '))) {
+                    res.status(401).json({ message: 'Unauthorized: No token provided' });
                     return;
                 }
-                const token = authHeader.split(" ")[1];
+                const token = authHeader.split(' ')[1];
                 const payload = (0, jsonwebtoken_1.verify)(token, process.env.JWT_KEY);
                 // Ensure both id and type exist
                 if (!payload || !payload.id || !payload.type) {
                     res
                         .status(401)
-                        .json({ message: "Unauthorized: Invalid token payload" });
+                        .json({ message: 'Unauthorized: Invalid token payload' });
                     return;
                 }
                 // Use payload.id and payload.type to fetch the appropriate record
-                if (payload.type === "user") {
+                if (payload.type === 'user') {
                     const user = yield prisma_1.default.user.findUnique({
                         where: { id: payload.id },
                     });
                     if (!user) {
-                        res.status(404).json({ message: "User not found" });
+                        res.status(404).json({ message: 'User not found' });
                         return;
                     }
                     res.status(200).json({
-                        type: "user",
+                        type: 'user',
                         id: user.id,
                         name: user.name,
                         email: user.email,
@@ -52,16 +52,16 @@ class SessionController {
                         googleId: user.googleId,
                     });
                 }
-                else if (payload.type === "company") {
+                else if (payload.type === 'company') {
                     const company = yield prisma_1.default.company.findUnique({
                         where: { id: payload.id },
                     });
                     if (!company) {
-                        res.status(404).json({ message: "Company not found" });
+                        res.status(404).json({ message: 'Company not found' });
                         return;
                     }
                     res.status(200).json({
-                        type: "company",
+                        type: 'company',
                         id: company.id,
                         name: company.name,
                         email: company.email,
@@ -71,14 +71,14 @@ class SessionController {
                     });
                 }
                 else {
-                    res.status(403).json({ message: "Forbidden: Unknown session type" });
+                    res.status(403).json({ message: 'Forbidden: Unknown session type' });
                 }
             }
             catch (err) {
-                console.error("Session error:", err);
+                console.error('Session error:', err);
                 res
                     .status(401)
-                    .json({ message: "Unauthorized: Invalid or expired token" });
+                    .json({ message: 'Unauthorized: Invalid or expired token' });
             }
         });
     }

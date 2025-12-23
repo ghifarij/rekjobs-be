@@ -42,11 +42,11 @@ class UserInterviewService {
                 },
             });
             if (!interview) {
-                throw new Error("Interview not found");
+                throw new Error('Interview not found');
             }
             // 2) Ensure that this user actually is the applicant
             if (interview.application.applicantId !== applicantId) {
-                throw new Error("Forbidden: you can only reschedule your own interviews");
+                throw new Error('Forbidden: you can only reschedule your own interviews');
             }
             // 3) Update the interview record
             return this.prisma.interview.update({
@@ -64,9 +64,9 @@ class UserInterviewService {
                 include: { application: { select: { applicantId: true } } },
             });
             if (!interview)
-                throw new Error("Interview not found");
+                throw new Error('Interview not found');
             if (interview.application.applicantId !== applicantId) {
-                throw new Error("Forbidden: you can only accept your own interviews");
+                throw new Error('Forbidden: you can only accept your own interviews');
             }
             return this.prisma.interview.update({
                 where: { id: interviewId },

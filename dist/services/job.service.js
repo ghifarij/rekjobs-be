@@ -78,7 +78,7 @@ class JobService {
                         applications: true, // Include applications in the response
                     },
                     orderBy: {
-                        createdAt: "desc", // Optional: Order by creation date
+                        createdAt: 'desc', // Optional: Order by creation date
                     },
                 });
                 return jobs;
@@ -94,9 +94,9 @@ class JobService {
             if (search) {
                 const q = search.trim();
                 where.OR = [
-                    { title: { contains: q, mode: "insensitive" } },
-                    { location: { contains: q, mode: "insensitive" } },
-                    { description: { contains: q, mode: "insensitive" } },
+                    { title: { contains: q, mode: 'insensitive' } },
+                    { location: { contains: q, mode: 'insensitive' } },
+                    { description: { contains: q, mode: 'insensitive' } },
                 ];
             }
             return prisma.job.findMany({
@@ -112,7 +112,7 @@ class JobService {
                     },
                 },
                 orderBy: {
-                    createdAt: "desc",
+                    createdAt: 'desc',
                 },
             });
         });

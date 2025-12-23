@@ -1,9 +1,9 @@
-import { CompanySize, PrismaClient } from "../../prisma/generated/client";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
-import { sendEmail, sendCompanyVerificationEmail } from "../utils/email";
-import { resetPasswordEmailTemplate } from "../utils/resetPasswordEmail";
+import { CompanySize, PrismaClient } from '../../prisma/generated/client';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
+import { sendEmail, sendCompanyVerificationEmail } from '../utils/email';
+import { resetPasswordEmailTemplate } from '../utils/resetPasswordEmail';
 
 export class AuthCompanyService {
   private prisma: PrismaClient;
@@ -17,20 +17,20 @@ export class AuthCompanyService {
   public async loginCompany(email: string, password: string) {
     const company = await this.prisma.company.findUnique({ where: { email } });
     if (!company) {
-      throw new Error("Company not found");
+      throw new Error('Company not found');
     }
 
     const isValidPassword = await bcrypt.compare(password, company.password);
     if (!isValidPassword) {
-      throw new Error("Invalid password");
+      throw new Error('Invalid password');
     }
 
     const token = jwt.sign(
-      { id: company.id, type: "company" },
+      { id: company.id, type: 'company' },
       process.env.JWT_KEY!,
       {
-        expiresIn: "1d",
-      }
+        expiresIn: '1d',
+      },
     );
 
     return {
@@ -49,19 +49,19 @@ export class AuthCompanyService {
       where: { email },
     });
     if (existingCompany) {
-      throw new Error("Email already registered");
+      throw new Error('Email already registered');
     }
 
     const verificationToken = jwt.sign({ email }, process.env.JWT_KEY!, {
-      expiresIn: "1h",
+      expiresIn: '1h',
     });
 
     // Create company with verification token and default values
     await this.prisma.company.create({
       data: {
         email,
-        name: "", // Will be set during verification
-        password: "", // Will be set during verification
+        name: '', // Will be set during verification
+        password: '', // Will be set during verification
         verificationToken,
         isVerified: false,
       },
@@ -70,7 +70,7 @@ export class AuthCompanyService {
     await sendCompanyVerificationEmail(email, verificationToken);
 
     return {
-      message: "Verification email sent",
+      message: 'Verification email sent',
     };
   }
 
@@ -84,7 +84,7 @@ export class AuthCompanyService {
       location?: string;
       industry?: string;
       size?: CompanySize;
-    }
+    },
   ) {
     const decoded = jwt.verify(token, process.env.JWT_KEY!) as {
       email: string;
@@ -98,7 +98,7 @@ export class AuthCompanyService {
     });
 
     if (!company) {
-      throw new Error("Invalid or expired verification token");
+      throw new Error('Invalid or expired verification token');
     }
 
     const hashedPassword = await bcrypt.hash(companyData.password, 10);
@@ -119,7 +119,7 @@ export class AuthCompanyService {
     });
 
     return {
-      message: "Account verified successfully",
+      message: 'Account verified successfully',
     };
   }
 
@@ -127,14 +127,14 @@ export class AuthCompanyService {
     googleId: string,
     email?: string,
     name?: string,
-    picture?: string
+    picture?: string,
   ) {
     try {
       if (!googleId) {
-        throw new Error("Google ID is required");
+        throw new Error('Google ID is required');
       }
 
-      console.log("Processing social login for Google ID:", googleId);
+      console.log('Processing social login for Google ID:', googleId);
 
       // First check if company exists with this email
       const existingCompany = await this.prisma.company.findFirst({
@@ -144,12 +144,12 @@ export class AuthCompanyService {
       if (existingCompany) {
         if (!existingCompany.googleId) {
           throw new Error(
-            "Email already registered with password. Please use email login instead."
+            'Email already registered with password. Please use email login instead.',
           );
         }
         if (existingCompany.googleId !== String(googleId)) {
           throw new Error(
-            "This email is already registered with a different Google account."
+            'This email is already registered with a different Google account.',
           );
         }
       }
@@ -161,10 +161,10 @@ export class AuthCompanyService {
 
       if (!company) {
         if (!email) {
-          throw new Error("Email is required for new company registration");
+          throw new Error('Email is required for new company registration');
         }
 
-        console.log("Company not found with Google ID, creating new company");
+        console.log('Company not found with Google ID, creating new company');
 
         // Create new company with Google ID and provided info
         company = await this.prisma.company.create({
@@ -178,9 +178,9 @@ export class AuthCompanyService {
           },
         });
 
-        console.log("Created new company:", company);
+        console.log('Created new company:', company);
       } else {
-        console.log("Found existing company:", company);
+        console.log('Found existing company:', company);
 
         // Update company info if provided
         if (email || name || picture) {
@@ -192,17 +192,17 @@ export class AuthCompanyService {
               ...(picture && { logo: picture }),
             },
           });
-          console.log("Updated company info:", company);
+          console.log('Updated company info:', company);
         }
       }
 
       // Using id instead of userId for consistency
       const jwtToken = jwt.sign(
-        { id: company.id, type: "company" },
+        { id: company.id, type: 'company' },
         process.env.JWT_KEY!,
         {
-          expiresIn: "1d",
-        }
+          expiresIn: '1d',
+        },
       );
 
       return {
@@ -213,10 +213,10 @@ export class AuthCompanyService {
           name: company.name,
           logo: company.logo,
         },
-        message: "Login successful",
+        message: 'Login successful',
       };
     } catch (error) {
-      console.error("Social login error:", error);
+      console.error('Social login error:', error);
       throw error;
     }
   }
@@ -224,24 +224,24 @@ export class AuthCompanyService {
   public async forgotPasswordCompany(email: string) {
     const company = await this.prisma.company.findUnique({ where: { email } });
     if (!company) {
-      throw new Error("Company not found");
+      throw new Error('Company not found');
     }
 
     const resetToken = jwt.sign({ id: company.id }, process.env.JWT_KEY!, {
-      expiresIn: "1h",
+      expiresIn: '1h',
     });
 
     const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/reset-password?token=${resetToken}`;
 
     await sendEmail({
       to: email,
-      subject: "Reset Password Anda - RekJobs",
+      subject: 'Reset Password Anda - RekJobs',
       html: resetPasswordEmailTemplate(resetLink),
       text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
     });
 
     return {
-      message: "Email reset password berhasil dikirim",
+      message: 'Email reset password berhasil dikirim',
     };
   }
 
@@ -254,11 +254,11 @@ export class AuthCompanyService {
     });
 
     if (!company) {
-      throw new Error("Company not found");
+      throw new Error('Company not found');
     }
 
     if (!company.resetPasswordToken || company.resetPasswordToken !== token) {
-      throw new Error("Invalid or expired reset token");
+      throw new Error('Invalid or expired reset token');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -273,7 +273,7 @@ export class AuthCompanyService {
     });
 
     return {
-      message: "Password reset successfully",
+      message: 'Password reset successfully',
     };
   }
 
@@ -286,7 +286,7 @@ export class AuthCompanyService {
     });
 
     if (!company) {
-      throw new Error("Company not found");
+      throw new Error('Company not found');
     }
 
     return {

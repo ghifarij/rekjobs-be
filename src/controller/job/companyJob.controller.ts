@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { JobService } from "../../services/job.service";
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { JobService } from '../../services/job.service';
+import { RequestHandler } from 'express';
 
 interface CompanyRequest extends Request {
   company?: {
@@ -18,12 +18,12 @@ export class CompanyJobController {
   public createJob: RequestHandler = async (
     req: CompanyRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const jobData = {
@@ -47,12 +47,12 @@ export class CompanyJobController {
   public updateJob: RequestHandler = async (
     req: CompanyRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const jobId = parseInt(req.params.id);
@@ -78,17 +78,17 @@ export class CompanyJobController {
   public deleteJob: RequestHandler = async (
     req: CompanyRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const jobId = parseInt(req.params.id);
       await this.jobService.deleteJob(jobId, companyId);
-      res.json({ message: "Job deleted successfully" });
+      res.json({ message: 'Job deleted successfully' });
     } catch (error) {
       next(error);
     }
@@ -97,12 +97,12 @@ export class CompanyJobController {
   public getJobs: RequestHandler = async (
     req: CompanyRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const jobs = await this.jobService.getCompanyJobs(companyId);
@@ -115,16 +115,16 @@ export class CompanyJobController {
   public getJobById: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       const jobId = parseInt(req.params.id);
-      if (!companyId) throw new Error("Company ID not found");
+      if (!companyId) throw new Error('Company ID not found');
 
       const job = await this.jobService.getJobById(jobId, companyId);
       if (!job) {
-        res.status(404).json({ message: "Job not found or unauthorized" });
+        res.status(404).json({ message: 'Job not found or unauthorized' });
         return;
       }
       res.json(job);

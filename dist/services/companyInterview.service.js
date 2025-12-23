@@ -36,7 +36,7 @@ class CompanyInterviewService {
                     select: { id: true },
                 });
                 if (!application) {
-                    throw new Error("Application not found");
+                    throw new Error('Application not found');
                 }
                 // create the interview
                 const interview = yield this.prisma.interview.create({
@@ -50,7 +50,7 @@ class CompanyInterviewService {
                 return interview;
             }
             catch (err) {
-                console.error("Error scheduling interview:", err);
+                console.error('Error scheduling interview:', err);
                 throw err;
             }
         });
@@ -81,7 +81,7 @@ class CompanyInterviewService {
                         },
                     },
                 },
-                orderBy: { scheduledAt: "desc" },
+                orderBy: { scheduledAt: 'desc' },
             });
         });
     }
@@ -107,11 +107,11 @@ class CompanyInterviewService {
                 },
             });
             if (!interview) {
-                throw new Error("Interview not found");
+                throw new Error('Interview not found');
             }
             // 2) Ensure that job belongs to this company
             if (interview.application.job.companyId !== companyId) {
-                throw new Error("Forbidden: cannot reschedule interviews for other companies");
+                throw new Error('Forbidden: cannot reschedule interviews for other companies');
             }
             // 3) Update the interview
             return this.prisma.interview.update({

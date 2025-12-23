@@ -72,9 +72,9 @@ const cloudinaryRemove = (secure_url) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.cloudinaryRemove = cloudinaryRemove;
 const extractPublicIdFormUrl = (url) => {
-    const urlParts = url.split("/");
+    const urlParts = url.split('/');
     const publicIdWithExtension = urlParts[urlParts.length - 1];
-    const publicId = publicIdWithExtension.split(".")[0];
+    const publicId = publicIdWithExtension.split('.')[0];
     return publicId;
 };
 //# sourceMappingURL=cloudinary.js.map

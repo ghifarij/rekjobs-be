@@ -10,7 +10,7 @@ class SessionRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get("/", this.sessionController.getSession);
+        this.router.get('/', this.sessionController.getSession);
     }
     getRouter() {
         return this.router;

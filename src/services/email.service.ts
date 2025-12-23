@@ -1,8 +1,8 @@
-import nodemailer from "nodemailer";
-import handlebars from "handlebars";
-import fs from "fs";
-import path from "path";
-import { Application, ApplicationStatus } from "../../prisma/generated/client";
+import nodemailer from 'nodemailer';
+import handlebars from 'handlebars';
+import fs from 'fs';
+import path from 'path';
+import { Application, ApplicationStatus } from '../../prisma/generated/client';
 
 export class EmailService {
   private transporter: nodemailer.Transporter;
@@ -11,7 +11,7 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === "true",
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -28,18 +28,18 @@ export class EmailService {
         html,
       });
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error('Error sending email:', error);
       throw error;
     }
   }
 
   public async sendLoginEmail(email: string, token: string) {
-    const templatePath = path.join(__dirname, "../templates/login.html");
-    const source = fs.readFileSync(templatePath, "utf-8");
+    const templatePath = path.join(__dirname, '../templates/login.html');
+    const source = fs.readFileSync(templatePath, 'utf-8');
     const compiled = handlebars.compile(source);
     const html = compiled({ token });
 
-    await this.sendEmail(email, "Your Login Link", html);
+    await this.sendEmail(email, 'Your Login Link', html);
   }
 
   public async sendApplicationStatusUpdate(
@@ -47,7 +47,7 @@ export class EmailService {
       job: { title: string; company: { name: string } };
       applicant: { email: string; name: string };
     },
-    status: ApplicationStatus
+    status: ApplicationStatus,
   ) {
     const { applicant, job } = application;
     const subject = `Update on Your Application for ${job.title} at ${job.company.name}`;
@@ -68,7 +68,7 @@ export class EmailService {
           </p>
     `;
 
-    if (status === "PROCESSING") {
+    if (status === 'PROCESSING') {
       html += `
         <div style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 16px; margin-bottom: 24px; border-radius: 4px;">
           <p style="color: #0369a1; font-weight: 600; margin: 0;">Status Lamaran: Diproses</p>
@@ -91,7 +91,7 @@ export class EmailService {
           </ul>
         </div>
       `;
-    } else if (status === "REJECTED") {
+    } else if (status === 'REJECTED') {
       html += `
         <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; margin-bottom: 24px; border-radius: 4px;">
           <p style="color: #b91c1c; font-weight: 600; margin: 0;">Status Lamaran: Tidak Dipilih</p>

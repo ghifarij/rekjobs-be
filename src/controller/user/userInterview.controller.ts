@@ -1,7 +1,7 @@
 // src/controllers/company.controller.ts
-import { Request, Response, NextFunction } from "express";
-import { RequestHandler } from "express";
-import { UserInterviewService } from "../../services/userInterview.service";
+import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
+import { UserInterviewService } from '../../services/userInterview.service';
 
 export class UserInterviewController {
   private userInterviewService: UserInterviewService;
@@ -9,7 +9,7 @@ export class UserInterviewController {
   public requestReschedule: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const applicantId = req.user!.id;
@@ -17,7 +17,7 @@ export class UserInterviewController {
       const updated =
         await this.userInterviewService.requestRescheduleInterview(
           interviewId,
-          applicantId
+          applicantId,
         );
       res.status(200).json(updated);
     } catch (err) {
@@ -28,12 +28,12 @@ export class UserInterviewController {
   public acceptInterview: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const updated = await this.userInterviewService.acceptInterview(
         parseInt(req.params.id),
-        req.user!.id
+        req.user!.id,
       );
       res.status(200).json(updated);
     } catch (err) {

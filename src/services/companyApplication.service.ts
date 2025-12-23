@@ -2,9 +2,9 @@ import {
   PrismaClient,
   Application,
   ApplicationStatus,
-} from "../../prisma/generated/client";
-import prisma from "../prisma";
-import { EmailService } from "./email.service";
+} from '../../prisma/generated/client';
+import prisma from '../prisma';
+import { EmailService } from './email.service';
 
 export class CompanyApplicationService {
   private prisma: PrismaClient;
@@ -19,7 +19,7 @@ export class CompanyApplicationService {
    * Fetch all applications belonging to the company's jobs
    */
   public async getCompanyApplications(
-    companyId: number
+    companyId: number,
   ): Promise<Application[]> {
     return this.prisma.application.findMany({
       where: { job: { companyId } },
@@ -28,7 +28,7 @@ export class CompanyApplicationService {
         applicant: true,
         interviews: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -37,7 +37,7 @@ export class CompanyApplicationService {
    */
   public async getApplicationById(
     companyId: number,
-    applicationId: number
+    applicationId: number,
   ): Promise<{
     id: number;
     status: ApplicationStatus;
@@ -122,10 +122,10 @@ export class CompanyApplicationService {
     });
 
     if (!app) {
-      throw new Error("Application not found");
+      throw new Error('Application not found');
     }
     if (app.job.companyId !== companyId) {
-      throw new Error("Forbidden: you may only view your own applications");
+      throw new Error('Forbidden: you may only view your own applications');
     }
 
     return {
@@ -176,7 +176,7 @@ export class CompanyApplicationService {
   public async updateApplicationStatus(
     companyId: number,
     applicationId: number,
-    status: ApplicationStatus
+    status: ApplicationStatus,
   ): Promise<Application> {
     const application = await this.prisma.application.findUnique({
       where: { id: applicationId },
@@ -190,7 +190,7 @@ export class CompanyApplicationService {
     });
 
     if (!application) {
-      throw new Error("Application not found");
+      throw new Error('Application not found');
     }
     if (application.job.companyId !== companyId) {
       throw new Error("You don't have permission to update this application");
@@ -210,10 +210,10 @@ export class CompanyApplicationService {
     try {
       await this.emailService.sendApplicationStatusUpdate(
         updatedApplication,
-        status
+        status,
       );
     } catch (error) {
-      console.error("Failed to send email notification:", error);
+      console.error('Failed to send email notification:', error);
       // Don't throw the error to prevent the status update from failing
     }
 

@@ -20,10 +20,10 @@ class UserController {
             try {
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 if (!userId)
-                    throw new Error("User ID not found");
+                    throw new Error('User ID not found');
                 const profile = yield this.userService.getProfile(userId);
                 if (!profile) {
-                    res.status(404).json({ message: "User not found" });
+                    res.status(404).json({ message: 'User not found' });
                     return;
                 }
                 res.json(profile);
@@ -38,7 +38,7 @@ class UserController {
             try {
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 if (!userId)
-                    throw new Error("User ID not found");
+                    throw new Error('User ID not found');
                 // Destructure everything you expect from the client
                 const { name, phone, bio, avatar, skills, password, experience, education, } = req.body;
                 // Build up the payload for your service

@@ -11,8 +11,8 @@ class UserRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get("/", verify_user_1.verifyTokenUser, this.UserController.getProfile);
-        this.router.put("/", verify_user_1.verifyTokenUser, this.UserController.updateProfile);
+        this.router.get('/', verify_user_1.verifyTokenUser, this.UserController.getProfile);
+        this.router.put('/', verify_user_1.verifyTokenUser, this.UserController.updateProfile);
     }
     getRouter() {
         return this.router;

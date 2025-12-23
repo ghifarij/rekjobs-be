@@ -11,9 +11,9 @@ class CompanyInterviewRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.post("/", verify_company_1.verifyTokenCompany, this.companyInterviewController.createInterview);
-        this.router.get("/", verify_company_1.verifyTokenCompany, this.companyInterviewController.getCompanyInterviews);
-        this.router.patch("/:id", verify_company_1.verifyTokenCompany, this.companyInterviewController.reschedule);
+        this.router.post('/', verify_company_1.verifyTokenCompany, this.companyInterviewController.createInterview);
+        this.router.get('/', verify_company_1.verifyTokenCompany, this.companyInterviewController.getCompanyInterviews);
+        this.router.patch('/:id', verify_company_1.verifyTokenCompany, this.companyInterviewController.reschedule);
     }
     getRouter() {
         return this.router;

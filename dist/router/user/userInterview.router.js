@@ -11,8 +11,8 @@ class UserInterviewRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.patch("/:id/reschedule", verify_user_1.verifyTokenUser, this.userInterviewController.requestReschedule);
-        this.router.patch("/:id/accept", verify_user_1.verifyTokenUser, this.userInterviewController.acceptInterview);
+        this.router.patch('/:id/reschedule', verify_user_1.verifyTokenUser, this.userInterviewController.requestReschedule);
+        this.router.patch('/:id/accept', verify_user_1.verifyTokenUser, this.userInterviewController.acceptInterview);
     }
     getRouter() {
         return this.router;

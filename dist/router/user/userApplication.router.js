@@ -13,15 +13,15 @@ class UserApplicationRouter {
     }
     initializeRoutes() {
         const multiUpload = __1.upload.fields([
-            { name: "coverLetter", maxCount: 1 },
-            { name: "resume", maxCount: 1 },
+            { name: 'coverLetter', maxCount: 1 },
+            { name: 'resume', maxCount: 1 },
         ]);
         // Create a new application (job seeker)
-        this.router.post("/", verify_user_1.verifyTokenUser, multiUpload, this.userApplicationController.createApplication);
+        this.router.post('/', verify_user_1.verifyTokenUser, multiUpload, this.userApplicationController.createApplication);
         // Get all applications for the current user
-        this.router.get("/", verify_user_1.verifyTokenUser, this.userApplicationController.getUserApplications);
+        this.router.get('/', verify_user_1.verifyTokenUser, this.userApplicationController.getUserApplications);
         // Delete an application (job seeker)
-        this.router.delete("/:id", verify_user_1.verifyTokenUser, this.userApplicationController.deleteApplication);
+        this.router.delete('/:id', verify_user_1.verifyTokenUser, this.userApplicationController.deleteApplication);
     }
     getRouter() {
         return this.router;

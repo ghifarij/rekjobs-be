@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { verifyTokenCompany } from "../../middleware/verify.company";
-import { CompanyInterviewController } from "../../controller/company/companyInterview.controller";
+import { Router } from 'express';
+import { verifyTokenCompany } from '../../middleware/verify.company';
+import { CompanyInterviewController } from '../../controller/company/companyInterview.controller';
 
 export class CompanyInterviewRouter {
   public router: Router;
@@ -14,21 +14,21 @@ export class CompanyInterviewRouter {
 
   private initializeRoutes() {
     this.router.post(
-      "/",
+      '/',
       verifyTokenCompany,
-      this.companyInterviewController.createInterview
+      this.companyInterviewController.createInterview,
     );
 
     this.router.get(
-      "/",
+      '/',
       verifyTokenCompany,
-      this.companyInterviewController.getCompanyInterviews
+      this.companyInterviewController.getCompanyInterviews,
     );
 
     this.router.patch(
-      "/:id",
+      '/:id',
       verifyTokenCompany,
-      this.companyInterviewController.reschedule
+      this.companyInterviewController.reschedule,
     );
   }
 

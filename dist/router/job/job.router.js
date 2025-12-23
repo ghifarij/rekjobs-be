@@ -11,8 +11,8 @@ class JobRouter {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get("/", verify_user_1.verifyTokenUser, this.jobController.getAllJobs);
-        this.router.get("/:slug", verify_user_1.verifyTokenUser, this.jobController.getJobBySlug);
+        this.router.get('/', verify_user_1.verifyTokenUser, this.jobController.getAllJobs);
+        this.router.get('/:slug', verify_user_1.verifyTokenUser, this.jobController.getJobBySlug);
     }
     getRouter() {
         return this.router;

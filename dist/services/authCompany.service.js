@@ -28,14 +28,14 @@ class AuthCompanyService {
         return __awaiter(this, void 0, void 0, function* () {
             const company = yield this.prisma.company.findUnique({ where: { email } });
             if (!company) {
-                throw new Error("Company not found");
+                throw new Error('Company not found');
             }
             const isValidPassword = yield bcrypt_1.default.compare(password, company.password);
             if (!isValidPassword) {
-                throw new Error("Invalid password");
+                throw new Error('Invalid password');
             }
-            const token = jsonwebtoken_1.default.sign({ id: company.id, type: "company" }, process.env.JWT_KEY, {
-                expiresIn: "1d",
+            const token = jsonwebtoken_1.default.sign({ id: company.id, type: 'company' }, process.env.JWT_KEY, {
+                expiresIn: '1d',
             });
             return {
                 token,
@@ -54,24 +54,24 @@ class AuthCompanyService {
                 where: { email },
             });
             if (existingCompany) {
-                throw new Error("Email already registered");
+                throw new Error('Email already registered');
             }
             const verificationToken = jsonwebtoken_1.default.sign({ email }, process.env.JWT_KEY, {
-                expiresIn: "1h",
+                expiresIn: '1h',
             });
             // Create company with verification token and default values
             yield this.prisma.company.create({
                 data: {
                     email,
-                    name: "", // Will be set during verification
-                    password: "", // Will be set during verification
+                    name: '', // Will be set during verification
+                    password: '', // Will be set during verification
                     verificationToken,
                     isVerified: false,
                 },
             });
             yield (0, email_1.sendCompanyVerificationEmail)(email, verificationToken);
             return {
-                message: "Verification email sent",
+                message: 'Verification email sent',
             };
         });
     }
@@ -86,7 +86,7 @@ class AuthCompanyService {
                 },
             });
             if (!company) {
-                throw new Error("Invalid or expired verification token");
+                throw new Error('Invalid or expired verification token');
             }
             const hashedPassword = yield bcrypt_1.default.hash(companyData.password, 10);
             yield this.prisma.company.update({
@@ -104,7 +104,7 @@ class AuthCompanyService {
                 },
             });
             return {
-                message: "Account verified successfully",
+                message: 'Account verified successfully',
             };
         });
     }
@@ -112,19 +112,19 @@ class AuthCompanyService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!googleId) {
-                    throw new Error("Google ID is required");
+                    throw new Error('Google ID is required');
                 }
-                console.log("Processing social login for Google ID:", googleId);
+                console.log('Processing social login for Google ID:', googleId);
                 // First check if company exists with this email
                 const existingCompany = yield this.prisma.company.findFirst({
                     where: { email },
                 });
                 if (existingCompany) {
                     if (!existingCompany.googleId) {
-                        throw new Error("Email already registered with password. Please use email login instead.");
+                        throw new Error('Email already registered with password. Please use email login instead.');
                     }
                     if (existingCompany.googleId !== String(googleId)) {
-                        throw new Error("This email is already registered with a different Google account.");
+                        throw new Error('This email is already registered with a different Google account.');
                     }
                 }
                 // Find company by Google ID
@@ -133,9 +133,9 @@ class AuthCompanyService {
                 });
                 if (!company) {
                     if (!email) {
-                        throw new Error("Email is required for new company registration");
+                        throw new Error('Email is required for new company registration');
                     }
-                    console.log("Company not found with Google ID, creating new company");
+                    console.log('Company not found with Google ID, creating new company');
                     // Create new company with Google ID and provided info
                     company = yield this.prisma.company.create({
                         data: {
@@ -147,22 +147,22 @@ class AuthCompanyService {
                             logo: picture || null,
                         },
                     });
-                    console.log("Created new company:", company);
+                    console.log('Created new company:', company);
                 }
                 else {
-                    console.log("Found existing company:", company);
+                    console.log('Found existing company:', company);
                     // Update company info if provided
                     if (email || name || picture) {
                         company = yield this.prisma.company.update({
                             where: { id: company.id },
                             data: Object.assign(Object.assign(Object.assign({}, (email && { email })), (name && { name })), (picture && { logo: picture })),
                         });
-                        console.log("Updated company info:", company);
+                        console.log('Updated company info:', company);
                     }
                 }
                 // Using id instead of userId for consistency
-                const jwtToken = jsonwebtoken_1.default.sign({ id: company.id, type: "company" }, process.env.JWT_KEY, {
-                    expiresIn: "1d",
+                const jwtToken = jsonwebtoken_1.default.sign({ id: company.id, type: 'company' }, process.env.JWT_KEY, {
+                    expiresIn: '1d',
                 });
                 return {
                     token: jwtToken,
@@ -172,11 +172,11 @@ class AuthCompanyService {
                         name: company.name,
                         logo: company.logo,
                     },
-                    message: "Login successful",
+                    message: 'Login successful',
                 };
             }
             catch (error) {
-                console.error("Social login error:", error);
+                console.error('Social login error:', error);
                 throw error;
             }
         });
@@ -185,20 +185,20 @@ class AuthCompanyService {
         return __awaiter(this, void 0, void 0, function* () {
             const company = yield this.prisma.company.findUnique({ where: { email } });
             if (!company) {
-                throw new Error("Company not found");
+                throw new Error('Company not found');
             }
             const resetToken = jsonwebtoken_1.default.sign({ id: company.id }, process.env.JWT_KEY, {
-                expiresIn: "1h",
+                expiresIn: '1h',
             });
             const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/reset-password?token=${resetToken}`;
             yield (0, email_1.sendEmail)({
                 to: email,
-                subject: "Reset Password Anda - RekJobs",
+                subject: 'Reset Password Anda - RekJobs',
                 html: (0, resetPasswordEmail_1.resetPasswordEmailTemplate)(resetLink),
                 text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
             });
             return {
-                message: "Email reset password berhasil dikirim",
+                message: 'Email reset password berhasil dikirim',
             };
         });
     }
@@ -209,10 +209,10 @@ class AuthCompanyService {
                 where: { id: decoded.id },
             });
             if (!company) {
-                throw new Error("Company not found");
+                throw new Error('Company not found');
             }
             if (!company.resetPasswordToken || company.resetPasswordToken !== token) {
-                throw new Error("Invalid or expired reset token");
+                throw new Error('Invalid or expired reset token');
             }
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
             yield this.prisma.company.update({
@@ -224,7 +224,7 @@ class AuthCompanyService {
                 },
             });
             return {
-                message: "Password reset successfully",
+                message: 'Password reset successfully',
             };
         });
     }
@@ -235,7 +235,7 @@ class AuthCompanyService {
                 where: { email: decoded.email },
             });
             if (!company) {
-                throw new Error("Company not found");
+                throw new Error('Company not found');
             }
             return {
                 isVerified: company.isVerified,

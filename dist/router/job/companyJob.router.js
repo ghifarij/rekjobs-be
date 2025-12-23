@@ -12,14 +12,14 @@ class CompanyJobRouter {
     }
     initializeRoutes() {
         // Create a new job
-        this.router.post("/", verify_company_1.verifyTokenCompany, this.companyJobController.createJob);
+        this.router.post('/', verify_company_1.verifyTokenCompany, this.companyJobController.createJob);
         // Get all jobs for the company
-        this.router.get("/", verify_company_1.verifyTokenCompany, this.companyJobController.getJobs);
-        this.router.get("/:id", verify_company_1.verifyTokenCompany, this.companyJobController.getJobById);
+        this.router.get('/', verify_company_1.verifyTokenCompany, this.companyJobController.getJobs);
+        this.router.get('/:id', verify_company_1.verifyTokenCompany, this.companyJobController.getJobById);
         // Update a job
-        this.router.put("/:id", verify_company_1.verifyTokenCompany, this.companyJobController.updateJob);
+        this.router.put('/:id', verify_company_1.verifyTokenCompany, this.companyJobController.updateJob);
         // Delete a job
-        this.router.delete("/:id", verify_company_1.verifyTokenCompany, this.companyJobController.deleteJob);
+        this.router.delete('/:id', verify_company_1.verifyTokenCompany, this.companyJobController.deleteJob);
     }
     getRouter() {
         return this.router;

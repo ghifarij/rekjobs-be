@@ -19,11 +19,11 @@ class CompanyController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const profile = yield this.companyService.getProfile(companyId);
                 if (!profile) {
-                    res.status(404).json({ message: "Company not found" });
+                    res.status(404).json({ message: 'Company not found' });
                     return;
                 }
                 res.status(200).json(profile);
@@ -38,7 +38,7 @@ class CompanyController {
             try {
                 const companyId = (_a = req.company) === null || _a === void 0 ? void 0 : _a.id;
                 if (!companyId) {
-                    throw new Error("Company ID not found");
+                    throw new Error('Company ID not found');
                 }
                 const updateData = {
                     name: req.body.name,

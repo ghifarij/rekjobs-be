@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploader = void 0;
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
-const uploader = (type = "memoryStorage", filePrefix, folderName) => {
-    const defaultDir = path_1.default.join(__dirname, "../../public");
-    const storage = type == "memoryStorage"
+const uploader = (type = 'memoryStorage', filePrefix, folderName) => {
+    const defaultDir = path_1.default.join(__dirname, '../../public');
+    const storage = type == 'memoryStorage'
         ? multer_1.default.memoryStorage()
         : multer_1.default.diskStorage({
             destination: (req, file, cb) => {
@@ -18,9 +18,9 @@ const uploader = (type = "memoryStorage", filePrefix, folderName) => {
                 cb(null, destination);
             },
             filename: (req, file, cb) => {
-                const originalNameParts = file.originalname.split(".");
+                const originalNameParts = file.originalname.split('.');
                 const fileExtension = originalNameParts[originalNameParts.length - 1];
-                const newFileName = filePrefix + Date.now() + "." + fileExtension;
+                const newFileName = filePrefix + Date.now() + '.' + fileExtension;
                 cb(null, newFileName);
             },
         });

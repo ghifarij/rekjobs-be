@@ -28,15 +28,15 @@ class AuthUserService {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.prisma.user.findUnique({ where: { email } });
             if (!user) {
-                throw new Error("User not found");
+                throw new Error('User not found');
             }
             const isValidPassword = yield bcrypt_1.default.compare(password, user.password);
             if (!isValidPassword) {
-                throw new Error("Invalid password");
+                throw new Error('Invalid password');
             }
             // Using id instead of userId for consistency
-            const token = jsonwebtoken_1.default.sign({ id: user.id, type: "user" }, process.env.JWT_KEY, {
-                expiresIn: "1d",
+            const token = jsonwebtoken_1.default.sign({ id: user.id, type: 'user' }, process.env.JWT_KEY, {
+                expiresIn: '1d',
             });
             return {
                 token,
@@ -54,24 +54,24 @@ class AuthUserService {
                 where: { email },
             });
             if (existingUser) {
-                throw new Error("Email already registered");
+                throw new Error('Email already registered');
             }
             const verificationToken = jsonwebtoken_1.default.sign({ email }, process.env.JWT_KEY, {
-                expiresIn: "1h",
+                expiresIn: '1h',
             });
             // Create user with verification token and default values
             yield this.prisma.user.create({
                 data: {
                     email,
-                    name: "", // Will be set during verification
-                    password: "", // Will be set during verification
+                    name: '', // Will be set during verification
+                    password: '', // Will be set during verification
                     verificationToken,
                     isVerified: false,
                 },
             });
             yield (0, email_1.sendUserVerificationEmail)(email, verificationToken);
             return {
-                message: "Verification email sent",
+                message: 'Verification email sent',
             };
         });
     }
@@ -82,10 +82,10 @@ class AuthUserService {
                 where: { email: decoded.email },
             });
             if (!user) {
-                throw new Error("User not found");
+                throw new Error('User not found');
             }
             if (user.isVerified) {
-                throw new Error("User already verified");
+                throw new Error('User already verified');
             }
             const hashedPassword = yield bcrypt_1.default.hash(userData.password, 10);
             yield this.prisma.user.update({
@@ -98,7 +98,7 @@ class AuthUserService {
                 },
             });
             return {
-                message: "Account verified successfully",
+                message: 'Account verified successfully',
             };
         });
     }
@@ -106,19 +106,19 @@ class AuthUserService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!googleId) {
-                    throw new Error("Google ID is required");
+                    throw new Error('Google ID is required');
                 }
-                console.log("Processing social login for Google ID:", googleId);
+                console.log('Processing social login for Google ID:', googleId);
                 // First check if user exists with this email
                 const existingUser = yield this.prisma.user.findFirst({
                     where: { email },
                 });
                 if (existingUser) {
                     if (!existingUser.googleId) {
-                        throw new Error("Email already registered with password. Please use email login instead.");
+                        throw new Error('Email already registered with password. Please use email login instead.');
                     }
                     if (existingUser.googleId !== String(googleId)) {
-                        throw new Error("This email is already registered with a different Google account.");
+                        throw new Error('This email is already registered with a different Google account.');
                     }
                 }
                 // Find user by Google ID
@@ -127,9 +127,9 @@ class AuthUserService {
                 });
                 if (!user) {
                     if (!email) {
-                        throw new Error("Email is required for new user registration");
+                        throw new Error('Email is required for new user registration');
                     }
-                    console.log("User not found with Google ID, creating new user");
+                    console.log('User not found with Google ID, creating new user');
                     // Create new user with Google ID and provided info
                     user = yield this.prisma.user.create({
                         data: {
@@ -141,22 +141,22 @@ class AuthUserService {
                             avatar: picture || null,
                         },
                     });
-                    console.log("Created new user:", user);
+                    console.log('Created new user:', user);
                 }
                 else {
-                    console.log("Found existing user:", user);
+                    console.log('Found existing user:', user);
                     // Update user info if provided
                     if (email || name || picture) {
                         user = yield this.prisma.user.update({
                             where: { id: user.id },
                             data: Object.assign(Object.assign(Object.assign({}, (email && { email })), (name && { name })), (picture && { avatar: picture })),
                         });
-                        console.log("Updated user info:", user);
+                        console.log('Updated user info:', user);
                     }
                 }
                 // Using id instead of userId for consistency
-                const jwtToken = jsonwebtoken_1.default.sign({ id: user.id, type: "user" }, process.env.JWT_KEY, {
-                    expiresIn: "1d",
+                const jwtToken = jsonwebtoken_1.default.sign({ id: user.id, type: 'user' }, process.env.JWT_KEY, {
+                    expiresIn: '1d',
                 });
                 return {
                     token: jwtToken,
@@ -166,11 +166,11 @@ class AuthUserService {
                         name: user.name,
                         avatar: user.avatar,
                     },
-                    message: "Login successful",
+                    message: 'Login successful',
                 };
             }
             catch (error) {
-                console.error("Social login error:", error);
+                console.error('Social login error:', error);
                 throw error;
             }
         });
@@ -179,20 +179,20 @@ class AuthUserService {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.prisma.user.findUnique({ where: { email } });
             if (!user) {
-                throw new Error("User not found");
+                throw new Error('User not found');
             }
             const resetToken = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_KEY, {
-                expiresIn: "1h",
+                expiresIn: '1h',
             });
             const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/user/reset-password?token=${resetToken}`;
             yield (0, email_1.sendEmail)({
                 to: email,
-                subject: "Reset Password Anda - RekJobs",
+                subject: 'Reset Password Anda - RekJobs',
                 html: (0, resetPasswordEmail_1.resetPasswordEmailTemplate)(resetLink),
                 text: `Untuk mereset password Anda, silakan kunjungi link berikut: ${resetLink}`,
             });
             return {
-                message: "Email reset password berhasil dikirim",
+                message: 'Email reset password berhasil dikirim',
             };
         });
     }
@@ -203,10 +203,10 @@ class AuthUserService {
                 where: { id: decoded.id },
             });
             if (!user) {
-                throw new Error("User not found");
+                throw new Error('User not found');
             }
             if (!user.resetPasswordToken || user.resetPasswordToken !== token) {
-                throw new Error("Invalid or expired reset token");
+                throw new Error('Invalid or expired reset token');
             }
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
             yield this.prisma.user.update({
@@ -218,7 +218,7 @@ class AuthUserService {
                 },
             });
             return {
-                message: "Password reset successfully",
+                message: 'Password reset successfully',
             };
         });
     }
@@ -229,7 +229,7 @@ class AuthUserService {
                 where: { email: decoded.email },
             });
             if (!user) {
-                throw new Error("User not found");
+                throw new Error('User not found');
             }
             return {
                 isVerified: user.isVerified,

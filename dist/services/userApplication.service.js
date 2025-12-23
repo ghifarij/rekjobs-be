@@ -26,25 +26,25 @@ class UserApplicationService {
             // 1) basic existence checks…
             const job = yield this.prisma.job.findUnique({ where: { id: jobId } });
             if (!job)
-                throw new Error("Job not found");
+                throw new Error('Job not found');
             const user = yield this.prisma.user.findUnique({
                 where: { id: applicantId },
             });
             if (!user)
-                throw new Error("User not found");
+                throw new Error('User not found');
             if (yield this.prisma.application.findFirst({
                 where: { applicantId, jobId },
             })) {
-                throw new Error("You have already applied for this job");
+                throw new Error('You have already applied for this job');
             }
             // 2) upload to Cloudinary
             let coverUrl;
             let resumeUrl;
             if (files.coverLetterFile) {
-                coverUrl = yield (0, uploadService_1.uploadApplicationFile)(files.coverLetterFile, "applications");
+                coverUrl = yield (0, uploadService_1.uploadApplicationFile)(files.coverLetterFile, 'applications');
             }
             if (files.resumeFile) {
-                resumeUrl = yield (0, uploadService_1.uploadApplicationFile)(files.resumeFile, "applications");
+                resumeUrl = yield (0, uploadService_1.uploadApplicationFile)(files.resumeFile, 'applications');
             }
             // 3) create the record with the returned secure URLs
             return this.prisma.application.create({
@@ -79,13 +79,13 @@ class UserApplicationService {
                         interviews: true,
                     },
                     orderBy: {
-                        createdAt: "desc",
+                        createdAt: 'desc',
                     },
                 });
                 return applications;
             }
             catch (error) {
-                console.error("Error fetching user applications:", error);
+                console.error('Error fetching user applications:', error);
                 throw error;
             }
         });
@@ -98,7 +98,7 @@ class UserApplicationService {
                     where: { id: applicationId },
                 });
                 if (!application) {
-                    throw new Error("Application not found");
+                    throw new Error('Application not found');
                 }
                 // Check if the user is the applicant
                 if (application.applicantId !== userId) {
@@ -110,7 +110,7 @@ class UserApplicationService {
                 });
             }
             catch (error) {
-                console.error("Error deleting application:", error);
+                console.error('Error deleting application:', error);
                 throw error;
             }
         });

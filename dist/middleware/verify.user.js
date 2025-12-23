@@ -6,14 +6,14 @@ const verifyTokenUser = (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader) {
-            res.status(401).json({ message: "No authorization header found" });
+            res.status(401).json({ message: 'No authorization header found' });
             return;
         }
-        const token = authHeader.startsWith("Bearer ")
-            ? authHeader.split(" ")[1]
+        const token = authHeader.startsWith('Bearer ')
+            ? authHeader.split(' ')[1]
             : null;
         if (!token) {
-            res.status(401).json({ message: "Invalid token format" });
+            res.status(401).json({ message: 'Invalid token format' });
             return;
         }
         try {
@@ -24,15 +24,15 @@ const verifyTokenUser = (req, res, next) => {
             next();
         }
         catch (verifyError) {
-            res.status(401).json({ message: "Invalid or expired token" });
+            res.status(401).json({ message: 'Invalid or expired token' });
             return;
         }
     }
     catch (err) {
-        console.error("Token verification error:", err);
+        console.error('Token verification error:', err);
         res
             .status(500)
-            .json({ message: "Internal server error during authentication" });
+            .json({ message: 'Internal server error during authentication' });
     }
 };
 exports.verifyTokenUser = verifyTokenUser;

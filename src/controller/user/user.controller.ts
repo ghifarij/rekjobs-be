@@ -1,7 +1,36 @@
 // src/controllers/user.controller.ts
-import { Request, Response, NextFunction } from "express";
-import { UserService } from "../../services/user.service";
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { UserService } from '../../services/user.service';
+import { RequestHandler } from 'express';
+
+interface UpdateUserProfile {
+  name?: string;
+  phone?: string;
+  bio?: string;
+  avatar?: string;
+  skills?: string[];
+  password?: string;
+  experience?: {
+    id?: number;
+    title: string;
+    company: string;
+    location?: string;
+    startDate: Date;
+    endDate?: Date;
+    current: boolean;
+    description?: string;
+  }[];
+  education?: {
+    id?: number;
+    school: string;
+    degree: string;
+    fieldOfStudy: string;
+    startDate: Date;
+    endDate?: Date;
+    current: boolean;
+    description?: string;
+  }[];
+}
 
 export class UserController {
   private userService = new UserService();
@@ -10,15 +39,15 @@ export class UserController {
   public getProfile: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const userId = req.user?.id;
-      if (!userId) throw new Error("User ID not found");
+      if (!userId) throw new Error('User ID not found');
 
       const profile = await this.userService.getProfile(userId);
       if (!profile) {
-        res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: 'User not found' });
         return;
       }
       res.json(profile);
@@ -31,11 +60,11 @@ export class UserController {
   public updateProfile: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const userId = req.user?.id;
-      if (!userId) throw new Error("User ID not found");
+      if (!userId) throw new Error('User ID not found');
 
       // Destructure everything you expect from the client
       const {
@@ -50,7 +79,7 @@ export class UserController {
       } = req.body;
 
       // Build up the payload for your service
-      const updateData: any = {
+      const updateData: UpdateUserProfile = {
         name,
         phone,
         bio,

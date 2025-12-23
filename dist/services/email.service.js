@@ -22,7 +22,7 @@ class EmailService {
         this.transporter = nodemailer_1.default.createTransport({
             host: process.env.SMTP_HOST,
             port: Number(process.env.SMTP_PORT),
-            secure: process.env.SMTP_SECURE === "true",
+            secure: process.env.SMTP_SECURE === 'true',
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
@@ -40,18 +40,18 @@ class EmailService {
                 });
             }
             catch (error) {
-                console.error("Error sending email:", error);
+                console.error('Error sending email:', error);
                 throw error;
             }
         });
     }
     sendLoginEmail(email, token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const templatePath = path_1.default.join(__dirname, "../templates/login.html");
-            const source = fs_1.default.readFileSync(templatePath, "utf-8");
+            const templatePath = path_1.default.join(__dirname, '../templates/login.html');
+            const source = fs_1.default.readFileSync(templatePath, 'utf-8');
             const compiled = handlebars_1.default.compile(source);
             const html = compiled({ token });
-            yield this.sendEmail(email, "Your Login Link", html);
+            yield this.sendEmail(email, 'Your Login Link', html);
         });
     }
     sendApplicationStatusUpdate(application, status) {
@@ -73,7 +73,7 @@ class EmailService {
             <strong style="color: #0f172a;">${job.company.name}</strong>.
           </p>
     `;
-            if (status === "PROCESSING") {
+            if (status === 'PROCESSING') {
                 html += `
         <div style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 16px; margin-bottom: 24px; border-radius: 4px;">
           <p style="color: #0369a1; font-weight: 600; margin: 0;">Status Lamaran: Diproses</p>
@@ -97,7 +97,7 @@ class EmailService {
         </div>
       `;
             }
-            else if (status === "REJECTED") {
+            else if (status === 'REJECTED') {
                 html += `
         <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; margin-bottom: 24px; border-radius: 4px;">
           <p style="color: #b91c1c; font-weight: 600; margin: 0;">Status Lamaran: Tidak Dipilih</p>

@@ -32,7 +32,7 @@ class CompanyApplicationService {
                     applicant: true,
                     interviews: true,
                 },
-                orderBy: { createdAt: "desc" },
+                orderBy: { createdAt: 'desc' },
             });
         });
     }
@@ -84,10 +84,10 @@ class CompanyApplicationService {
                 },
             });
             if (!app) {
-                throw new Error("Application not found");
+                throw new Error('Application not found');
             }
             if (app.job.companyId !== companyId) {
-                throw new Error("Forbidden: you may only view your own applications");
+                throw new Error('Forbidden: you may only view your own applications');
             }
             return {
                 id: app.id,
@@ -147,7 +147,7 @@ class CompanyApplicationService {
                 },
             });
             if (!application) {
-                throw new Error("Application not found");
+                throw new Error('Application not found');
             }
             if (application.job.companyId !== companyId) {
                 throw new Error("You don't have permission to update this application");
@@ -166,7 +166,7 @@ class CompanyApplicationService {
                 yield this.emailService.sendApplicationStatusUpdate(updatedApplication, status);
             }
             catch (error) {
-                console.error("Failed to send email notification:", error);
+                console.error('Failed to send email notification:', error);
                 // Don't throw the error to prevent the status update from failing
             }
             return updatedApplication;

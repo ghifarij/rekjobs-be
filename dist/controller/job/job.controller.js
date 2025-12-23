@@ -17,7 +17,7 @@ class JobController {
         this.getAllJobs = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { search } = req.query;
-                const jobs = yield this.jobService.getAllJobs(typeof search === "string" && search.length > 0 ? search : undefined);
+                const jobs = yield this.jobService.getAllJobs(typeof search === 'string' && search.length > 0 ? search : undefined);
                 res.json(jobs);
             }
             catch (err) {
@@ -29,12 +29,12 @@ class JobController {
                 // Instead of parsing an ID, we simply extract the slug from the URL parameter
                 const slug = req.params.slug;
                 if (!slug) {
-                    res.status(400).json({ message: "Slug is required" });
+                    res.status(400).json({ message: 'Slug is required' });
                     return;
                 }
                 const job = yield this.jobService.getJobBySlug(slug);
                 if (!job) {
-                    res.status(404).json({ message: "Job not found" });
+                    res.status(404).json({ message: 'Job not found' });
                     return;
                 }
                 res.status(200).json(job);

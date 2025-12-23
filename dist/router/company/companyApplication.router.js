@@ -12,11 +12,11 @@ class CompanyApplicationRouter {
     }
     initializeRoutes() {
         // Get all applications for a specific job (company)
-        this.router.get("/", verify_company_1.verifyTokenCompany, this.companyApplicationController.getCompanyApplications);
+        this.router.get('/', verify_company_1.verifyTokenCompany, this.companyApplicationController.getCompanyApplications);
         // Get a single application by ID (user or company)
-        this.router.get("/:id", verify_company_1.verifyTokenCompany, this.companyApplicationController.getApplicationById);
+        this.router.get('/:id', verify_company_1.verifyTokenCompany, this.companyApplicationController.getApplicationById);
         // Update application status (company)
-        this.router.patch("/:id/status", verify_company_1.verifyTokenCompany, this.companyApplicationController.updateApplicationStatus);
+        this.router.patch('/:id/status', verify_company_1.verifyTokenCompany, this.companyApplicationController.updateApplicationStatus);
     }
     getRouter() {
         return this.router;

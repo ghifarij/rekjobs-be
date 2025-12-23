@@ -20,10 +20,10 @@ class UserApplicationController {
             try {
                 const applicantId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 if (!applicantId)
-                    throw new Error("User ID not found");
+                    throw new Error('User ID not found');
                 const jobId = Number(req.body.jobId);
                 if (!jobId)
-                    throw new Error("Job ID is required");
+                    throw new Error('Job ID is required');
                 // Multer puts files on req.files as an object of arrays
                 const files = req.files;
                 const coverLetterFile = (_b = files === null || files === void 0 ? void 0 : files.coverLetter) === null || _b === void 0 ? void 0 : _b[0];
@@ -41,7 +41,7 @@ class UserApplicationController {
             try {
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 if (!userId)
-                    throw new Error("User ID not found");
+                    throw new Error('User ID not found');
                 const applications = yield this.applicationService.getUserApplications(userId);
                 res.json(applications);
             }
@@ -55,10 +55,10 @@ class UserApplicationController {
             try {
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 if (!userId)
-                    throw new Error("User ID not found");
+                    throw new Error('User ID not found');
                 const applicationId = parseInt(req.params.id, 10);
                 yield this.applicationService.deleteApplication(applicationId, userId);
-                res.json({ message: "Application deleted successfully" });
+                res.json({ message: 'Application deleted successfully' });
             }
             catch (err) {
                 next(err);
