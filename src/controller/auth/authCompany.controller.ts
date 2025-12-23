@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { AuthCompanyService } from "../../services/authCompany.service";
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { AuthCompanyService } from '../../services/authCompany.service';
+import { RequestHandler } from 'express';
 
 export class AuthCompanyController {
   private authCompanyService: AuthCompanyService;
@@ -12,13 +12,13 @@ export class AuthCompanyController {
   public loginCompany: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { email, password } = req.body;
       const result = await this.authCompanyService.loginCompany(
         email,
-        password
+        password,
       );
       res.json(result);
     } catch (error) {
@@ -29,7 +29,7 @@ export class AuthCompanyController {
   public registerCompany: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { email } = req.body;
@@ -43,7 +43,7 @@ export class AuthCompanyController {
   public verifyCompany: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const {
@@ -74,17 +74,17 @@ export class AuthCompanyController {
   public socialLogin: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
-      console.log("Social login request body:", req.body);
+      console.log('Social login request body:', req.body);
       const { googleId, email, name, picture } = req.body;
-      console.log("Extracted Google data:", { googleId, email, name, picture });
+      console.log('Extracted Google data:', { googleId, email, name, picture });
       const result = await this.authCompanyService.socialLogin(
         googleId,
         email,
         name,
-        picture
+        picture,
       );
       res.json(result);
     } catch (error) {
@@ -95,7 +95,7 @@ export class AuthCompanyController {
   public forgotPasswordCompany: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { email } = req.body;
@@ -109,13 +109,13 @@ export class AuthCompanyController {
   public resetPasswordCompany: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { token, password } = req.body;
       const result = await this.authCompanyService.resetPasswordCompany(
         token,
-        password
+        password,
       );
       res.json(result);
     } catch (error) {
@@ -126,13 +126,12 @@ export class AuthCompanyController {
   public checkVerificationStatus: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { token } = req.body;
-      const result = await this.authCompanyService.checkVerificationStatus(
-        token
-      );
+      const result =
+        await this.authCompanyService.checkVerificationStatus(token);
       res.json(result);
     } catch (error) {
       next(error);

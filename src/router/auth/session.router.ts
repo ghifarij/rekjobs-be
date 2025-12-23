@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { SessionController } from "../../controller/auth/session.controller";
+import { Router } from 'express';
+import { SessionController } from '../../controller/auth/session.controller';
 
 export class SessionRouter {
   public router: Router;
@@ -12,7 +12,7 @@ export class SessionRouter {
   }
 
   private initializeRoutes() {
-    this.router.get("/", this.sessionController.getSession);
+    this.router.get('/', this.sessionController.getSession);
   }
 
   public getRouter(): Router {

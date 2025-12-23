@@ -3,8 +3,8 @@ import {
   PrismaClient,
   Interview,
   InterviewStatus,
-} from "../../prisma/generated/client";
-import prisma from "../prisma";
+} from '../../prisma/generated/client';
+import prisma from '../prisma';
 
 export class CompanyInterviewService {
   private prisma = prisma as PrismaClient;
@@ -19,7 +19,7 @@ export class CompanyInterviewService {
   public async createInterview(
     applicationId: number,
     scheduledAt: Date,
-    notes?: string
+    notes?: string,
   ): Promise<Interview> {
     try {
       // ensure the application exists
@@ -28,7 +28,7 @@ export class CompanyInterviewService {
         select: { id: true },
       });
       if (!application) {
-        throw new Error("Application not found");
+        throw new Error('Application not found');
       }
 
       // create the interview
@@ -43,7 +43,7 @@ export class CompanyInterviewService {
 
       return interview;
     } catch (err) {
-      console.error("Error scheduling interview:", err);
+      console.error('Error scheduling interview:', err);
       throw err;
     }
   }
@@ -73,7 +73,7 @@ export class CompanyInterviewService {
           },
         },
       },
-      orderBy: { scheduledAt: "desc" },
+      orderBy: { scheduledAt: 'desc' },
     });
   }
 
@@ -89,7 +89,7 @@ export class CompanyInterviewService {
     interviewId: number,
     companyId: number,
     newDate: Date,
-    notes?: string
+    notes?: string,
   ): Promise<Interview> {
     // 1) Load the interview and its job->companyId
     const interview = await this.prisma.interview.findUnique({
@@ -103,13 +103,13 @@ export class CompanyInterviewService {
       },
     });
     if (!interview) {
-      throw new Error("Interview not found");
+      throw new Error('Interview not found');
     }
 
     // 2) Ensure that job belongs to this company
     if (interview.application.job.companyId !== companyId) {
       throw new Error(
-        "Forbidden: cannot reschedule interviews for other companies"
+        'Forbidden: cannot reschedule interviews for other companies',
       );
     }
 

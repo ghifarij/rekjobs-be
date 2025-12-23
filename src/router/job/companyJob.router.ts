@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { CompanyJobController } from "../../controller/job/companyJob.controller";
-import { verifyTokenCompany } from "../../middleware/verify.company";
+import { Router } from 'express';
+import { CompanyJobController } from '../../controller/job/companyJob.controller';
+import { verifyTokenCompany } from '../../middleware/verify.company';
 
 export class CompanyJobRouter {
   public router: Router;
@@ -15,32 +15,32 @@ export class CompanyJobRouter {
   private initializeRoutes() {
     // Create a new job
     this.router.post(
-      "/",
+      '/',
       verifyTokenCompany,
-      this.companyJobController.createJob
+      this.companyJobController.createJob,
     );
 
     // Get all jobs for the company
-    this.router.get("/", verifyTokenCompany, this.companyJobController.getJobs);
+    this.router.get('/', verifyTokenCompany, this.companyJobController.getJobs);
 
     this.router.get(
-      "/:id",
+      '/:id',
       verifyTokenCompany,
-      this.companyJobController.getJobById
+      this.companyJobController.getJobById,
     );
 
     // Update a job
     this.router.put(
-      "/:id",
+      '/:id',
       verifyTokenCompany,
-      this.companyJobController.updateJob
+      this.companyJobController.updateJob,
     );
 
     // Delete a job
     this.router.delete(
-      "/:id",
+      '/:id',
       verifyTokenCompany,
-      this.companyJobController.deleteJob
+      this.companyJobController.deleteJob,
     );
   }
 

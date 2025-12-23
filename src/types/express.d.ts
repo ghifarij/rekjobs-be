@@ -1,4 +1,4 @@
-import * as express from "express";
+import 'express';
 
 export type UserPayload = {
   id: number;

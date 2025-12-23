@@ -1,7 +1,7 @@
 // src/services/company.service.ts
-import { CompanySize, PrismaClient } from "../../prisma/generated/client";
-import prisma from "../prisma";
-import { hash } from "bcryptjs";
+import { CompanySize, PrismaClient } from '../../prisma/generated/client';
+import prisma from '../prisma';
+import { hash } from 'bcryptjs';
 
 export class CompanyService {
   private prisma = prisma as PrismaClient;
@@ -52,7 +52,7 @@ export class CompanyService {
       industry?: string;
       size?: CompanySize;
       password?: string;
-    }
+    },
   ) {
     const updates: typeof data = { ...data };
     if (updates.password) {

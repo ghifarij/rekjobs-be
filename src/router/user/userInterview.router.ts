@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { UserInterviewController } from "../../controller/user/userInterview.controller";
-import { verifyTokenUser } from "../../middleware/verify.user";
+import { Router } from 'express';
+import { UserInterviewController } from '../../controller/user/userInterview.controller';
+import { verifyTokenUser } from '../../middleware/verify.user';
 
 export class UserInterviewRouter {
   public router: Router;
@@ -14,15 +14,15 @@ export class UserInterviewRouter {
 
   private initializeRoutes() {
     this.router.patch(
-      "/:id/reschedule",
+      '/:id/reschedule',
       verifyTokenUser,
-      this.userInterviewController.requestReschedule
+      this.userInterviewController.requestReschedule,
     );
 
     this.router.patch(
-      "/:id/accept",
+      '/:id/accept',
       verifyTokenUser,
-      this.userInterviewController.acceptInterview
+      this.userInterviewController.acceptInterview,
     );
   }
 

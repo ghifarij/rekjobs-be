@@ -1,6 +1,6 @@
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
-import * as streamifier from "streamifier";
-import dotenv from "dotenv";
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import * as streamifier from 'streamifier';
+import dotenv from 'dotenv';
 dotenv.config();
 
 cloudinary.config({
@@ -11,7 +11,7 @@ cloudinary.config({
 
 export const cloudinaryUpload = (
   file: Express.Multer.File,
-  folder: string
+  folder: string,
 ): Promise<UploadApiResponse> => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -19,7 +19,7 @@ export const cloudinaryUpload = (
       (error, result) => {
         if (error) return reject(error);
         resolve(result as UploadApiResponse);
-      }
+      },
     );
 
     streamifier.createReadStream(file.buffer).pipe(uploadStream);
@@ -32,8 +32,8 @@ export const cloudinaryRemove = async (secure_url: string) => {
 };
 
 const extractPublicIdFormUrl = (url: string) => {
-  const urlParts = url.split("/");
+  const urlParts = url.split('/');
   const publicIdWithExtension = urlParts[urlParts.length - 1];
-  const publicId = publicIdWithExtension.split(".")[0];
+  const publicId = publicIdWithExtension.split('.')[0];
   return publicId;
 };

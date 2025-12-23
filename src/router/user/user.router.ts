@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { UserController } from "../../controller/user/user.controller";
-import { verifyTokenUser } from "../../middleware/verify.user";
+import { Router } from 'express';
+import { UserController } from '../../controller/user/user.controller';
+import { verifyTokenUser } from '../../middleware/verify.user';
 
 export class UserRouter {
   public router: Router;
@@ -13,8 +13,8 @@ export class UserRouter {
   }
 
   private initializeRoutes() {
-    this.router.get("/", verifyTokenUser, this.UserController.getProfile);
-    this.router.put("/", verifyTokenUser, this.UserController.updateProfile);
+    this.router.get('/', verifyTokenUser, this.UserController.getProfile);
+    this.router.put('/', verifyTokenUser, this.UserController.updateProfile);
   }
 
   public getRouter(): Router {

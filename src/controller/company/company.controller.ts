@@ -1,10 +1,10 @@
 // src/controllers/company.controller.ts
-import { Request, Response, NextFunction } from "express";
-import { CompanyService } from "../../services/company.service";
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { CompanyService } from '../../services/company.service';
+import { RequestHandler } from 'express';
 
 // Define CompanySize type
-type CompanySize = "MICRO" | "SMALL" | "MEDIUM" | "LARGE";
+type CompanySize = 'MICRO' | 'SMALL' | 'MEDIUM' | 'LARGE';
 
 export class CompanyController {
   private companyService: CompanyService;
@@ -17,17 +17,17 @@ export class CompanyController {
   public getProfile: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const profile = await this.companyService.getProfile(companyId);
       if (!profile) {
-        res.status(404).json({ message: "Company not found" });
+        res.status(404).json({ message: 'Company not found' });
         return;
       }
 
@@ -41,12 +41,12 @@ export class CompanyController {
   public updateProfile: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        throw new Error("Company ID not found");
+        throw new Error('Company ID not found');
       }
 
       const updateData: {
@@ -74,7 +74,7 @@ export class CompanyController {
 
       const updatedProfile = await this.companyService.updateProfile(
         companyId,
-        updateData
+        updateData,
       );
 
       res.status(200).json(updatedProfile);

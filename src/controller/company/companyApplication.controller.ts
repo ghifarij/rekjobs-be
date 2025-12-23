@@ -1,7 +1,7 @@
 // src/controllers/apply/application.controller.ts
-import { Request, Response, NextFunction, RequestHandler } from "express";
-import { CompanyApplicationService } from "../../services/companyApplication.service";
-import { ApplicationStatus } from "prisma/generated/client";
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { CompanyApplicationService } from '../../services/companyApplication.service';
+import { ApplicationStatus } from 'prisma/generated/client';
 
 export class CompanyApplicationController {
   private companyApplicationService = new CompanyApplicationService();
@@ -10,12 +10,12 @@ export class CompanyApplicationController {
   public getCompanyApplications: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: 'Unauthorized' });
         return;
       }
 
@@ -31,19 +31,19 @@ export class CompanyApplicationController {
   public getApplicationById: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: 'Unauthorized' });
         return;
       }
 
       const applicationId = parseInt(req.params.id, 10);
       const details = await this.companyApplicationService.getApplicationById(
         companyId,
-        applicationId
+        applicationId,
       );
 
       res.status(200).json({ details });
@@ -56,12 +56,12 @@ export class CompanyApplicationController {
   public updateApplicationStatus: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
       if (!companyId) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: 'Unauthorized' });
         return;
       }
 
@@ -73,7 +73,7 @@ export class CompanyApplicationController {
         await this.companyApplicationService.updateApplicationStatus(
           companyId,
           applicationId,
-          status as ApplicationStatus
+          status as ApplicationStatus,
         );
 
       res.status(200).json(updated);

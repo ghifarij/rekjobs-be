@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 interface EmailOptions {
   to: string;
@@ -9,8 +9,8 @@ interface EmailOptions {
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true',
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -82,8 +82,8 @@ const verificationEmailTemplate = (verificationLink: string) => `
 
 export const sendEmail = async ({ to, subject, text, html }: EmailOptions) => {
   try {
-    console.log("Attempting to send email to:", to);
-    console.log("Using SMTP configuration:", {
+    console.log('Attempting to send email to:', to);
+    console.log('Using SMTP configuration:', {
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
       user: process.env.SMTP_USER,
@@ -97,10 +97,10 @@ export const sendEmail = async ({ to, subject, text, html }: EmailOptions) => {
       html,
     });
 
-    console.log("Email sent successfully:", info.messageId);
+    console.log('Email sent successfully:', info.messageId);
   } catch (error) {
-    console.error("Error sending email:", error);
-    throw new Error("Failed to send email");
+    console.error('Error sending email:', error);
+    throw new Error('Failed to send email');
   }
 };
 
@@ -108,19 +108,19 @@ export const sendUserVerificationEmail = async (to: string, token: string) => {
   const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/user/verify-user/${token}`;
   await sendEmail({
     to,
-    subject: "Verifikasi Akun RekJobs",
+    subject: 'Verifikasi Akun RekJobs',
     html: verificationEmailTemplate(verificationLink),
   });
 };
 
 export const sendCompanyVerificationEmail = async (
   to: string,
-  token: string
+  token: string,
 ) => {
   const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL_FE}/auth/company/verify-company/${token}`;
   await sendEmail({
     to,
-    subject: "Verifikasi Akun RekJobs",
+    subject: 'Verifikasi Akun RekJobs',
     html: verificationEmailTemplate(verificationLink),
   });
 };

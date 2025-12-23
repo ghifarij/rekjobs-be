@@ -2,9 +2,9 @@ import {
   PrismaClient,
   Application,
   ApplicationStatus,
-} from "../../prisma/generated/client";
-import prisma from "../prisma";
-import { uploadApplicationFile } from "./uploadService";
+} from '../../prisma/generated/client';
+import prisma from '../prisma';
+import { uploadApplicationFile } from './uploadService';
 
 export class UserApplicationService {
   private prisma: PrismaClient;
@@ -20,23 +20,23 @@ export class UserApplicationService {
     files: {
       coverLetterFile?: Express.Multer.File;
       resumeFile?: Express.Multer.File;
-    }
+    },
   ): Promise<Application> {
     // 1) basic existence checks…
     const job = await this.prisma.job.findUnique({ where: { id: jobId } });
-    if (!job) throw new Error("Job not found");
+    if (!job) throw new Error('Job not found');
 
     const user = await this.prisma.user.findUnique({
       where: { id: applicantId },
     });
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error('User not found');
 
     if (
       await this.prisma.application.findFirst({
         where: { applicantId, jobId },
       })
     ) {
-      throw new Error("You have already applied for this job");
+      throw new Error('You have already applied for this job');
     }
 
     // 2) upload to Cloudinary
@@ -46,11 +46,11 @@ export class UserApplicationService {
     if (files.coverLetterFile) {
       coverUrl = await uploadApplicationFile(
         files.coverLetterFile,
-        "applications"
+        'applications',
       );
     }
     if (files.resumeFile) {
-      resumeUrl = await uploadApplicationFile(files.resumeFile, "applications");
+      resumeUrl = await uploadApplicationFile(files.resumeFile, 'applications');
     }
 
     // 3) create the record with the returned secure URLs
@@ -85,13 +85,13 @@ export class UserApplicationService {
           interviews: true,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
       });
 
       return applications;
     } catch (error) {
-      console.error("Error fetching user applications:", error);
+      console.error('Error fetching user applications:', error);
       throw error;
     }
   }
@@ -99,7 +99,7 @@ export class UserApplicationService {
   // Delete an application (only the applicant can delete their own application)
   public async deleteApplication(
     applicationId: number,
-    userId: number
+    userId: number,
   ): Promise<void> {
     try {
       const application = await this.prisma.application.findUnique({
@@ -107,7 +107,7 @@ export class UserApplicationService {
       });
 
       if (!application) {
-        throw new Error("Application not found");
+        throw new Error('Application not found');
       }
 
       // Check if the user is the applicant
@@ -120,7 +120,7 @@ export class UserApplicationService {
         where: { id: applicationId },
       });
     } catch (error) {
-      console.error("Error deleting application:", error);
+      console.error('Error deleting application:', error);
       throw error;
     }
   }

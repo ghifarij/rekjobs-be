@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { AuthCompanyController } from "../../controller/auth/authCompany.controller";
+import { Router } from 'express';
+import { AuthCompanyController } from '../../controller/auth/authCompany.controller';
 
 export class AuthCompanyRouter {
   public router: Router;
@@ -13,27 +13,27 @@ export class AuthCompanyRouter {
 
   private initializeRoutes() {
     // Login and Register
-    this.router.post("/login", this.authCompanyController.loginCompany);
-    this.router.post("/register", this.authCompanyController.registerCompany);
+    this.router.post('/login', this.authCompanyController.loginCompany);
+    this.router.post('/register', this.authCompanyController.registerCompany);
 
     // Email Verification
-    this.router.post("/verify", this.authCompanyController.verifyCompany);
+    this.router.post('/verify', this.authCompanyController.verifyCompany);
     this.router.post(
-      "/check-verification",
-      this.authCompanyController.checkVerificationStatus
+      '/check-verification',
+      this.authCompanyController.checkVerificationStatus,
     );
 
     // Social Login
-    this.router.post("/social-login", this.authCompanyController.socialLogin);
+    this.router.post('/social-login', this.authCompanyController.socialLogin);
 
     // Password Reset
     this.router.post(
-      "/forgot-password",
-      this.authCompanyController.forgotPasswordCompany
+      '/forgot-password',
+      this.authCompanyController.forgotPasswordCompany,
     );
     this.router.post(
-      "/reset-password",
-      this.authCompanyController.resetPasswordCompany
+      '/reset-password',
+      this.authCompanyController.resetPasswordCompany,
     );
   }
 

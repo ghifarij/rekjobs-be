@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { CompanyController } from "../../controller/company/company.controller";
-import { verifyTokenCompany } from "../../middleware/verify.company";
+import { Router } from 'express';
+import { CompanyController } from '../../controller/company/company.controller';
+import { verifyTokenCompany } from '../../middleware/verify.company';
 
 export class CompanyRouter {
   public router: Router;
@@ -13,11 +13,11 @@ export class CompanyRouter {
   }
 
   private initializeRoutes() {
-    this.router.get("/", verifyTokenCompany, this.companyController.getProfile);
+    this.router.get('/', verifyTokenCompany, this.companyController.getProfile);
     this.router.put(
-      "/",
+      '/',
       verifyTokenCompany,
-      this.companyController.updateProfile
+      this.companyController.updateProfile,
     );
   }
 

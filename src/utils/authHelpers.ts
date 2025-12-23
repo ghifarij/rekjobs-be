@@ -1,13 +1,15 @@
-import { sign, SignOptions } from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
-import ms from "ms";
+import { sign, SignOptions } from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
+import ms from 'ms';
 
 export const base_url_fe = process.env.NEXT_PUBLIC_BASE_URL_FE;
 export const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+import { UserPayload, CompanyPayload } from '../types/express';
+
 export function generateToken(
-  payload: any,
-  expiresIn: ms.StringValue = "1d"
+  payload: UserPayload | CompanyPayload | object,
+  expiresIn: ms.StringValue = '1d',
 ): string {
   const msValue = ms(expiresIn) as number;
   const options: SignOptions = { expiresIn: msValue / 1000 };

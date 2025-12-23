@@ -1,7 +1,7 @@
 // src/controllers/company.controller.ts
-import { Request, Response, NextFunction } from "express";
-import { RequestHandler } from "express";
-import { CompanyInterviewService } from "../../services/companyInterview.service";
+import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
+import { CompanyInterviewService } from '../../services/companyInterview.service';
 
 export class CompanyInterviewController {
   private companyInterviewService: CompanyInterviewService;
@@ -9,14 +9,14 @@ export class CompanyInterviewController {
   public createInterview: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { applicationId, scheduledAt, notes } = req.body;
       const interview = await this.companyInterviewService.createInterview(
         Number(applicationId),
         new Date(scheduledAt),
-        notes
+        notes,
       );
       res.status(201).json(interview);
     } catch (err) {
@@ -27,7 +27,7 @@ export class CompanyInterviewController {
   public getCompanyInterviews: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company?.id;
@@ -47,7 +47,7 @@ export class CompanyInterviewController {
   public reschedule: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const companyId = req.company!.id;
@@ -57,7 +57,7 @@ export class CompanyInterviewController {
         interviewId,
         companyId,
         new Date(scheduledAt),
-        notes
+        notes,
       );
       res.status(200).json(updated);
     } catch (err) {

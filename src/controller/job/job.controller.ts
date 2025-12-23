@@ -1,7 +1,7 @@
 // src/controllers/publicJob.controller.ts
-import { Request, Response, NextFunction } from "express";
-import { JobService } from "../../services/job.service";
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { JobService } from '../../services/job.service';
+import { RequestHandler } from 'express';
 
 export class JobController {
   private jobService: JobService;
@@ -14,12 +14,12 @@ export class JobController {
   public getAllJobs = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { search } = req.query;
       const jobs = await this.jobService.getAllJobs(
-        typeof search === "string" && search.length > 0 ? search : undefined
+        typeof search === 'string' && search.length > 0 ? search : undefined,
       );
       res.json(jobs);
     } catch (err) {
@@ -30,19 +30,19 @@ export class JobController {
   public getJobBySlug: RequestHandler = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       // Instead of parsing an ID, we simply extract the slug from the URL parameter
       const slug = req.params.slug;
       if (!slug) {
-        res.status(400).json({ message: "Slug is required" });
+        res.status(400).json({ message: 'Slug is required' });
         return;
       }
 
       const job = await this.jobService.getJobBySlug(slug);
       if (!job) {
-        res.status(404).json({ message: "Job not found" });
+        res.status(404).json({ message: 'Job not found' });
         return;
       }
       res.status(200).json(job);
