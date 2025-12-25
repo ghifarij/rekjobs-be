@@ -62,7 +62,7 @@ This project implements key DevOps practices to ensure reliability and consisten
 
 ### Docker
 
-The application is containerized using **Docker**, ensuring that it runs consistently across any environment.
+The application is containerized using **Docker** and orchestrated with **Docker Compose**, ensuring that it runs consistently across any environment.
 
 - **Base Image**: `node:20-alpine` for a lightweight footprint.
 - **Optimization**: Layer caching is utilized for faster builds (copying `package.json` first).
@@ -139,3 +139,22 @@ npm start
     ```bash
     docker run -p 8000:8000 --env-file .env rekjobs-be
     ```
+
+### Running with Docker Compose
+
+1.  **Prepare Environment Variables**
+    This project uses `.env` for local development and `.env.local` for Docker Compose environment variables.
+
+    Copy `.env.example` to `.env.local` and fill in the values:
+
+    ```bash
+    cp .env.example .env.local
+    ```
+
+2.  **Start Services**
+
+    ```bash
+    docker-compose up -d
+    ```
+
+    This will start both the backend service and the PostgreSQL database.
