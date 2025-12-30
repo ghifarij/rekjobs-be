@@ -19,7 +19,6 @@ import { UserInterviewRouter } from './router/user/userInterview.router';
 // Load environment variables
 dotenv.config();
 
-const PORT: number = 8000;
 export const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
@@ -74,9 +73,11 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on -> http://localhost:${PORT}/api`);
+const PORT = Number(process.env.PORT) || 8000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Listening on ${PORT}`);
 });
+
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
