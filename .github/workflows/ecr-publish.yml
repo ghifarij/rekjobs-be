@@ -2,7 +2,7 @@ name: Build & Push Docker Image to AWS ECR
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -44,4 +44,3 @@ jobs:
           echo "Pushed image:"
           echo "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
           echo "$ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_SHA}"
-
