@@ -38,8 +38,9 @@ describe('CompanyInterviewRouter', () => {
   });
 
   it('registers POST / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyInterviewRouter } = require('../../../../src/router/company/companyInterview.router');
+    const {
+      CompanyInterviewRouter,
+    } = require('../../../../src/router/company/companyInterview.router');
     new CompanyInterviewRouter();
 
     expect(postMock).toHaveBeenCalledTimes(1);
@@ -50,8 +51,9 @@ describe('CompanyInterviewRouter', () => {
   });
 
   it('registers GET / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyInterviewRouter } = require('../../../../src/router/company/companyInterview.router');
+    const {
+      CompanyInterviewRouter,
+    } = require('../../../../src/router/company/companyInterview.router');
     new CompanyInterviewRouter();
 
     expect(getMock).toHaveBeenCalledTimes(1);
@@ -62,8 +64,9 @@ describe('CompanyInterviewRouter', () => {
   });
 
   it('registers PATCH /:id with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyInterviewRouter } = require('../../../../src/router/company/companyInterview.router');
+    const {
+      CompanyInterviewRouter,
+    } = require('../../../../src/router/company/companyInterview.router');
     new CompanyInterviewRouter();
 
     expect(patchMock).toHaveBeenCalledTimes(1);
@@ -73,4 +76,3 @@ describe('CompanyInterviewRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

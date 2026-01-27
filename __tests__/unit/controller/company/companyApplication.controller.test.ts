@@ -67,7 +67,11 @@ describe('CompanyApplicationController', () => {
   });
 
   it('updateApplicationStatus returns 401 if no company id', async () => {
-    const req: any = { company: undefined, params: { id: '1' }, body: { status: 'ACCEPTED' } };
+    const req: any = {
+      company: undefined,
+      params: { id: '1' },
+      body: { status: 'ACCEPTED' },
+    };
     const res = createMockRes();
     const next = jest.fn();
     await controller.updateApplicationStatus(req, res as any, next as any);
@@ -76,16 +80,23 @@ describe('CompanyApplicationController', () => {
   });
 
   it('updateApplicationStatus forwards args and returns result', async () => {
-    const req: any = { company: { id: 6 }, params: { id: '11' }, body: { status: 'REJECTED' } };
+    const req: any = {
+      company: { id: 6 },
+      params: { id: '11' },
+      body: { status: 'REJECTED' },
+    };
     const res = createMockRes();
     const next = jest.fn();
     const updated = { id: 11, status: 'REJECTED' };
     mockService.updateApplicationStatus.mockResolvedValue(updated);
 
     await controller.updateApplicationStatus(req, res as any, next as any);
-    expect(mockService.updateApplicationStatus).toHaveBeenCalledWith(6, 11, 'REJECTED');
+    expect(mockService.updateApplicationStatus).toHaveBeenCalledWith(
+      6,
+      11,
+      'REJECTED',
+    );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(updated);
   });
 });
-

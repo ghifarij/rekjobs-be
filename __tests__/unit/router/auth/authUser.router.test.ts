@@ -29,8 +29,9 @@ describe('AuthUserRouter', () => {
   });
 
   it('registers all expected POST routes with handlers', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { AuthUserRouter } = require('../../../../src/router/auth/authUser.router');
+    const {
+      AuthUserRouter,
+    } = require('../../../../src/router/auth/authUser.router');
     new AuthUserRouter();
 
     const paths = postMock.mock.calls.map((c) => c[0]);

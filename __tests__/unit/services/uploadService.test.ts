@@ -13,8 +13,13 @@ describe('uploadService.uploadApplicationFile', () => {
   });
 
   it('returns secure_url from cloudinary response', async () => {
-    const mockFile = { buffer: Buffer.from('x'), originalname: 'file.pdf' } as any;
-    (cloudinaryUpload as jest.Mock).mockResolvedValue({ secure_url: 'https://cdn/x.pdf' });
+    const mockFile = {
+      buffer: Buffer.from('x'),
+      originalname: 'file.pdf',
+    } as any;
+    (cloudinaryUpload as jest.Mock).mockResolvedValue({
+      secure_url: 'https://cdn/x.pdf',
+    });
 
     const url = await uploadApplicationFile(mockFile, 'applications');
 
@@ -22,4 +27,3 @@ describe('uploadService.uploadApplicationFile', () => {
     expect(url).toBe('https://cdn/x.pdf');
   });
 });
-

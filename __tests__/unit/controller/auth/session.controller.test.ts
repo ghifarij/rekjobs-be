@@ -1,4 +1,6 @@
 import { SessionController } from '../../../../src/controller/auth/session.controller';
+import prisma from '../../../../src/prisma';
+import { verify } from 'jsonwebtoken';
 
 // Relative mock to align with controller's '../../prisma' import resolution
 jest.mock('../../../../src/prisma', () => ({
@@ -12,9 +14,6 @@ jest.mock('../../../../src/prisma', () => ({
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
 }));
-
-const { default: prisma } = require('../../../../src/prisma');
-const { verify } = require('jsonwebtoken');
 
 const createMockRes = () => {
   const res: any = {};
@@ -35,7 +34,9 @@ describe('SessionController.getSession', () => {
     const res = createMockRes();
     await controller.getSession(req, res as any);
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized: No token provided' });
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Unauthorized: No token provided',
+    });
   });
 
   it('returns user session payload when type is user', async () => {
@@ -92,7 +93,9 @@ describe('SessionController.getSession', () => {
     const res = createMockRes();
     await controller.getSession(req, res as any);
 
-    expect(prisma.company.findUnique).toHaveBeenCalledWith({ where: { id: 10 } });
+    expect(prisma.company.findUnique).toHaveBeenCalledWith({
+      where: { id: 10 },
+    });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       type: 'company',
@@ -111,16 +114,21 @@ describe('SessionController.getSession', () => {
     const res = createMockRes();
     await controller.getSession(req, res as any);
     expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Forbidden: Unknown session type' });
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Forbidden: Unknown session type',
+    });
   });
 
   it('returns 401 when token invalid or verify throws', async () => {
-    (verify as jest.Mock).mockImplementation(() => { throw new Error('bad token'); });
+    (verify as jest.Mock).mockImplementation(() => {
+      throw new Error('bad token');
+    });
     const req: any = { headers: { authorization: 'Bearer token' } };
     const res = createMockRes();
     await controller.getSession(req, res as any);
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized: Invalid or expired token' });
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Unauthorized: Invalid or expired token',
+    });
   });
 });
-

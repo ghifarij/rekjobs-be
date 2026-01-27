@@ -25,4 +25,14 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
+  {
+    files: ['**/__tests__/**/*.{js,ts}'],
+    languageOptions: {
+      globals: globals.jest,
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
 ];

@@ -54,4 +54,3 @@ describe('UserInterviewController', () => {
     expect(next).toHaveBeenCalled();
   });
 });
-

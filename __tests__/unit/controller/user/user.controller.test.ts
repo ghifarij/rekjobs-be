@@ -60,7 +60,13 @@ describe('UserController', () => {
     it('forwards minimal fields and returns updated', async () => {
       const req: any = {
         user: { id: 3 },
-        body: { name: 'New', phone: '123', bio: 'b', avatar: 'a', skills: ['x'] },
+        body: {
+          name: 'New',
+          phone: '123',
+          bio: 'b',
+          avatar: 'a',
+          skills: ['x'],
+        },
       };
       const res = createMockRes();
       const next = jest.fn();
@@ -129,4 +135,3 @@ describe('UserController', () => {
     });
   });
 });
-

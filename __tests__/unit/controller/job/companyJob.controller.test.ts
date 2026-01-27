@@ -67,7 +67,11 @@ describe('CompanyJobController', () => {
       const req: any = {
         company: { id: 2 },
         params: { id: '11' },
-        body: { title: 'New', deadline: '2026-02-02T00:00:00Z', isActive: true },
+        body: {
+          title: 'New',
+          deadline: '2026-02-02T00:00:00Z',
+          isActive: true,
+        },
       };
       const res = createMockRes();
       const next = jest.fn();
@@ -102,7 +106,9 @@ describe('CompanyJobController', () => {
 
       await controller.deleteJob(req, res as any, next as any);
       expect(mockService.deleteJob).toHaveBeenCalledWith(5, 3);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Job deleted successfully' });
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Job deleted successfully',
+      });
     });
 
     it('calls next on missing company id', async () => {
@@ -146,7 +152,9 @@ describe('CompanyJobController', () => {
       await controller.getJobById(req, res as any, next as any);
       expect(mockService.getJobById).toHaveBeenCalledWith(99, 7);
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Job not found or unauthorized' });
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Job not found or unauthorized',
+      });
     });
 
     it('returns job when found', async () => {
@@ -161,4 +169,3 @@ describe('CompanyJobController', () => {
     });
   });
 });
-

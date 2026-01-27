@@ -9,33 +9,36 @@ const mockPrisma: any = {
   },
 };
 
-jest.mock("../../../prisma/generated/client", () => {
+jest.mock('../../../prisma/generated/client', () => {
   return {
     __esModule: true,
     PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
     // Provide a minimal JobType enum shape if referenced by tests
-    JobType: { FULL_TIME: "FULL_TIME", PART_TIME: "PART_TIME" },
+    JobType: { FULL_TIME: 'FULL_TIME', PART_TIME: 'PART_TIME' },
     Prisma: {},
   } as any;
 });
 
-import { JobService } from "../../../src/services/job.service";
+import { JobService } from '../../../src/services/job.service';
 
-describe("JobService", () => {
+describe('JobService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("createJob generates a unique slug and creates the job", async () => {
+  it('createJob generates a unique slug and creates the job', async () => {
     const svc = new JobService();
-    mockPrisma.job.create.mockResolvedValue({ id: 1, slug: "software-engineer-abcdef" });
+    mockPrisma.job.create.mockResolvedValue({
+      id: 1,
+      slug: 'software-engineer-abcdef',
+    });
 
     const jobData: any = {
-      title: "Software Engineer",
-      description: "desc",
-      location: "Remote",
-      requirements: "reqs",
-      jobType: "FULL_TIME",
+      title: 'Software Engineer',
+      description: 'desc',
+      location: 'Remote',
+      requirements: 'reqs',
+      jobType: 'FULL_TIME',
       deadline: new Date(),
     };
 
@@ -45,28 +48,28 @@ describe("JobService", () => {
       expect.objectContaining({
         data: expect.objectContaining({
           companyId: 10,
-          title: "Software Engineer",
+          title: 'Software Engineer',
           slug: expect.stringMatching(/^software-engineer-[a-z0-9]{6}$/),
         }),
-      })
+      }),
     );
-    expect(result).toEqual({ id: 1, slug: "software-engineer-abcdef" });
+    expect(result).toEqual({ id: 1, slug: 'software-engineer-abcdef' });
   });
 
-  it("updateJob updates job with provided data and company scope", async () => {
+  it('updateJob updates job with provided data and company scope', async () => {
     const svc = new JobService();
-    mockPrisma.job.update.mockResolvedValue({ id: 2, title: "Updated" });
+    mockPrisma.job.update.mockResolvedValue({ id: 2, title: 'Updated' });
 
-    const updated = await svc.updateJob(2, 33, { title: "Updated" } as any);
+    const updated = await svc.updateJob(2, 33, { title: 'Updated' } as any);
 
     expect(mockPrisma.job.update).toHaveBeenCalledWith({
       where: { id: 2, companyId: 33 },
-      data: { title: "Updated" },
+      data: { title: 'Updated' },
     });
-    expect(updated).toEqual({ id: 2, title: "Updated" });
+    expect(updated).toEqual({ id: 2, title: 'Updated' });
   });
 
-  it("deleteJob deletes by id and companyId", async () => {
+  it('deleteJob deletes by id and companyId', async () => {
     const svc = new JobService();
     mockPrisma.job.delete.mockResolvedValue({});
 
@@ -77,7 +80,7 @@ describe("JobService", () => {
     });
   });
 
-  it("getCompanyJobs returns jobs ordered by createdAt desc with applications", async () => {
+  it('getCompanyJobs returns jobs ordered by createdAt desc with applications', async () => {
     const svc = new JobService();
     const jobs = [{ id: 1 }, { id: 2 }];
     mockPrisma.job.findMany.mockResolvedValue(jobs);
@@ -87,12 +90,12 @@ describe("JobService", () => {
     expect(mockPrisma.job.findMany).toHaveBeenCalledWith({
       where: { companyId: 99 },
       include: { applications: true },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
     expect(result).toBe(jobs);
   });
 
-  it("getAllJobs builds query without search", async () => {
+  it('getAllJobs builds query without search', async () => {
     const svc = new JobService();
     const jobs = [] as any;
     mockPrisma.job.findMany.mockResolvedValue(jobs);
@@ -104,44 +107,44 @@ describe("JobService", () => {
       include: {
         company: { select: { id: true, name: true, logo: true, email: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
     expect(result).toBe(jobs);
   });
 
-  it("getAllJobs builds query with search", async () => {
+  it('getAllJobs builds query with search', async () => {
     const svc = new JobService();
     const jobs = [] as any;
     mockPrisma.job.findMany.mockResolvedValue(jobs);
 
-    const result = await svc.getAllJobs("dev");
+    const result = await svc.getAllJobs('dev');
 
     expect(mockPrisma.job.findMany).toHaveBeenCalledWith({
       where: {
         isActive: true,
         OR: [
-          { title: { contains: "dev", mode: "insensitive" } },
-          { location: { contains: "dev", mode: "insensitive" } },
-          { description: { contains: "dev", mode: "insensitive" } },
+          { title: { contains: 'dev', mode: 'insensitive' } },
+          { location: { contains: 'dev', mode: 'insensitive' } },
+          { description: { contains: 'dev', mode: 'insensitive' } },
         ],
       },
       include: {
         company: { select: { id: true, name: true, logo: true, email: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
     expect(result).toBe(jobs);
   });
 
-  it("getJobBySlug includes company and applications", async () => {
+  it('getJobBySlug includes company and applications', async () => {
     const svc = new JobService();
-    const job = { id: 1, slug: "abc" } as any;
+    const job = { id: 1, slug: 'abc' } as any;
     mockPrisma.job.findUnique.mockResolvedValue(job);
 
-    const result = await svc.getJobBySlug("abc");
+    const result = await svc.getJobBySlug('abc');
 
     expect(mockPrisma.job.findUnique).toHaveBeenCalledWith({
-      where: { slug: "abc" },
+      where: { slug: 'abc' },
       include: {
         company: { select: { id: true, name: true, logo: true, email: true } },
         applications: { select: { id: true, status: true } },
@@ -150,16 +153,22 @@ describe("JobService", () => {
     expect(result).toBe(job);
   });
 
-  it("getJobById returns job only if company matches", async () => {
+  it('getJobById returns job only if company matches', async () => {
     const svc = new JobService();
 
     // matching company
-    mockPrisma.job.findUnique.mockResolvedValueOnce({ id: 1, companyId: 5 } as any);
+    mockPrisma.job.findUnique.mockResolvedValueOnce({
+      id: 1,
+      companyId: 5,
+    } as any);
     const ok = await svc.getJobById(1, 5);
     expect(ok).toEqual({ id: 1, companyId: 5 });
 
     // mismatched company -> null
-    mockPrisma.job.findUnique.mockResolvedValueOnce({ id: 2, companyId: 8 } as any);
+    mockPrisma.job.findUnique.mockResolvedValueOnce({
+      id: 2,
+      companyId: 8,
+    } as any);
     const notOk = await svc.getJobById(2, 9);
     expect(notOk).toBeNull();
   });

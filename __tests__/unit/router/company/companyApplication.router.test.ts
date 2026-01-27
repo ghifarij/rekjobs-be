@@ -36,14 +36,15 @@ describe('CompanyApplicationRouter', () => {
   });
 
   it('registers GET / and GET /:id with auth middleware and handlers', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyApplicationRouter } = require('../../../../src/router/company/companyApplication.router');
+    const {
+      CompanyApplicationRouter,
+    } = require('../../../../src/router/company/companyApplication.router');
     new CompanyApplicationRouter();
 
     // Expect two GET routes
     expect(getMock.mock.calls.length).toBe(2);
     const paths = getMock.mock.calls.map((c) => c[0]);
-    expect(paths).toEqual(expect.arrayContaining(['/','/:id']));
+    expect(paths).toEqual(expect.arrayContaining(['/', '/:id']));
 
     // Ensure each has middleware and a handler
     getMock.mock.calls.forEach(([, middleware, handler]) => {
@@ -53,8 +54,9 @@ describe('CompanyApplicationRouter', () => {
   });
 
   it('registers PATCH /:id/status with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyApplicationRouter } = require('../../../../src/router/company/companyApplication.router');
+    const {
+      CompanyApplicationRouter,
+    } = require('../../../../src/router/company/companyApplication.router');
     new CompanyApplicationRouter();
 
     expect(patchMock).toHaveBeenCalledTimes(1);
@@ -64,4 +66,3 @@ describe('CompanyApplicationRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

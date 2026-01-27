@@ -122,4 +122,3 @@ describe('AuthUserController', () => {
     expect(res.json).toHaveBeenCalledWith({ isVerified: true });
   });
 });
-

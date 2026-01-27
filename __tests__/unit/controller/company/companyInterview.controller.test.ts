@@ -24,7 +24,11 @@ describe('CompanyInterviewController', () => {
 
   it('createInterview forwards args and returns 201', async () => {
     const req: any = {
-      body: { applicationId: '12', scheduledAt: '2024-01-01T10:00:00Z', notes: 'n' },
+      body: {
+        applicationId: '12',
+        scheduledAt: '2024-01-01T10:00:00Z',
+        notes: 'n',
+      },
     };
     const res = createMockRes();
     const next = jest.fn();
@@ -84,4 +88,3 @@ describe('CompanyInterviewController', () => {
     expect(res.json).toHaveBeenCalledWith(updated);
   });
 });
-

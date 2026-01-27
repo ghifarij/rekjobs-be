@@ -30,7 +30,6 @@ describe('JobRouter', () => {
   });
 
   it('registers GET / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { JobRouter } = require('../../../../src/router/job/job.router');
     new JobRouter();
 
@@ -42,7 +41,6 @@ describe('JobRouter', () => {
   });
 
   it('registers GET /:slug with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { JobRouter } = require('../../../../src/router/job/job.router');
     new JobRouter();
 
@@ -53,4 +51,3 @@ describe('JobRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

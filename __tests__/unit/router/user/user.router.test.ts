@@ -32,7 +32,6 @@ describe('UserRouter', () => {
   });
 
   it('registers GET / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { UserRouter } = require('../../../../src/router/user/user.router');
     new UserRouter();
 
@@ -44,7 +43,6 @@ describe('UserRouter', () => {
   });
 
   it('registers PUT / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { UserRouter } = require('../../../../src/router/user/user.router');
     new UserRouter();
 
@@ -55,4 +53,3 @@ describe('UserRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

@@ -7,7 +7,10 @@ jest.mock('multer', () => {
     fields: jest.fn(),
   }));
   (multerFn as any).memoryStorage = jest.fn(() => 'MEM_STORAGE');
-  (multerFn as any).diskStorage = jest.fn((opts: any) => ({ kind: 'DISK', opts }));
+  (multerFn as any).diskStorage = jest.fn((opts: any) => ({
+    kind: 'DISK',
+    opts,
+  }));
   return {
     __esModule: true,
     default: multerFn,
@@ -56,4 +59,3 @@ describe('uploader', () => {
     });
   });
 });
-

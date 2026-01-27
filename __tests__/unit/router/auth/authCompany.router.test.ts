@@ -29,8 +29,9 @@ describe('AuthCompanyRouter', () => {
   });
 
   it('registers all expected POST routes with handlers', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { AuthCompanyRouter } = require('../../../../src/router/auth/authCompany.router');
+    const {
+      AuthCompanyRouter,
+    } = require('../../../../src/router/auth/authCompany.router');
     new AuthCompanyRouter();
 
     const paths = postMock.mock.calls.map((c) => c[0]);

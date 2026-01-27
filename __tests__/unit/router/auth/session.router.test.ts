@@ -23,8 +23,9 @@ describe('SessionRouter', () => {
   });
 
   it('registers GET / with a handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { SessionRouter } = require('../../../../src/router/auth/session.router');
+    const {
+      SessionRouter,
+    } = require('../../../../src/router/auth/session.router');
     new SessionRouter();
 
     expect(getMock).toHaveBeenCalled();

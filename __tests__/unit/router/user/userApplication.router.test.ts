@@ -42,8 +42,9 @@ describe('UserApplicationRouter', () => {
   });
 
   it('registers POST / with auth + upload middlewares and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { UserApplicationRouter } = require('../../../../src/router/user/userApplication.router');
+    const {
+      UserApplicationRouter,
+    } = require('../../../../src/router/user/userApplication.router');
     new UserApplicationRouter();
 
     expect(postMock).toHaveBeenCalledTimes(1);
@@ -55,8 +56,9 @@ describe('UserApplicationRouter', () => {
   });
 
   it('registers GET / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { UserApplicationRouter } = require('../../../../src/router/user/userApplication.router');
+    const {
+      UserApplicationRouter,
+    } = require('../../../../src/router/user/userApplication.router');
     new UserApplicationRouter();
 
     // Expect one GET route at '/'
@@ -68,8 +70,9 @@ describe('UserApplicationRouter', () => {
   });
 
   it('registers DELETE /:id with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { UserApplicationRouter } = require('../../../../src/router/user/userApplication.router');
+    const {
+      UserApplicationRouter,
+    } = require('../../../../src/router/user/userApplication.router');
     new UserApplicationRouter();
 
     expect(deleteMock).toHaveBeenCalledTimes(1);
@@ -79,4 +82,3 @@ describe('UserApplicationRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

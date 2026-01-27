@@ -30,8 +30,9 @@ describe('UserInterviewRouter', () => {
   });
 
   it('registers PATCH /:id/reschedule with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { UserInterviewRouter } = require('../../../../src/router/user/userInterview.router');
+    const {
+      UserInterviewRouter,
+    } = require('../../../../src/router/user/userInterview.router');
     new UserInterviewRouter();
 
     const call = patchMock.mock.calls.find((c) => c[0] === '/:id/reschedule');
@@ -42,8 +43,9 @@ describe('UserInterviewRouter', () => {
   });
 
   it('registers PATCH /:id/accept with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { UserInterviewRouter } = require('../../../../src/router/user/userInterview.router');
+    const {
+      UserInterviewRouter,
+    } = require('../../../../src/router/user/userInterview.router');
     new UserInterviewRouter();
 
     const call = patchMock.mock.calls.find((c) => c[0] === '/:id/accept');
@@ -53,4 +55,3 @@ describe('UserInterviewRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

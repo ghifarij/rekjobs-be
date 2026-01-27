@@ -39,8 +39,9 @@ describe('CompanyJobRouter', () => {
   });
 
   it('registers POST / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyJobRouter } = require('../../../../src/router/job/companyJob.router');
+    const {
+      CompanyJobRouter,
+    } = require('../../../../src/router/job/companyJob.router');
     new CompanyJobRouter();
 
     expect(postMock).toHaveBeenCalledTimes(1);
@@ -51,12 +52,13 @@ describe('CompanyJobRouter', () => {
   });
 
   it('registers GET / and GET /:id with auth middleware and handlers', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyJobRouter } = require('../../../../src/router/job/companyJob.router');
+    const {
+      CompanyJobRouter,
+    } = require('../../../../src/router/job/companyJob.router');
     new CompanyJobRouter();
 
     const paths = getMock.mock.calls.map((c) => c[0]);
-    expect(paths).toEqual(expect.arrayContaining(['/','/:id']));
+    expect(paths).toEqual(expect.arrayContaining(['/', '/:id']));
     // Each call should have middleware and handler
     getMock.mock.calls.forEach(([, middleware, handler]) => {
       expect(typeof middleware).toBe('function');
@@ -65,8 +67,9 @@ describe('CompanyJobRouter', () => {
   });
 
   it('registers PUT /:id with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyJobRouter } = require('../../../../src/router/job/companyJob.router');
+    const {
+      CompanyJobRouter,
+    } = require('../../../../src/router/job/companyJob.router');
     new CompanyJobRouter();
 
     expect(putMock).toHaveBeenCalledTimes(1);
@@ -77,8 +80,9 @@ describe('CompanyJobRouter', () => {
   });
 
   it('registers DELETE /:id with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyJobRouter } = require('../../../../src/router/job/companyJob.router');
+    const {
+      CompanyJobRouter,
+    } = require('../../../../src/router/job/companyJob.router');
     new CompanyJobRouter();
 
     expect(deleteMock).toHaveBeenCalledTimes(1);
@@ -88,4 +92,3 @@ describe('CompanyJobRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

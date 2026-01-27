@@ -1,7 +1,7 @@
-import { UserService } from "../../../src/services/user.service";
+import { UserService } from '../../../src/services/user.service';
 
 // Provide a mocked prisma singleton module without referencing outer variables (avoid hoist issues)
-jest.mock("../../../src/prisma", () => {
+jest.mock('../../../src/prisma', () => {
   const mocked = {
     user: {
       findUnique: jest.fn(),
@@ -20,25 +20,25 @@ jest.mock("../../../src/prisma", () => {
   return { __esModule: true, default: mocked };
 });
 
-jest.mock("bcryptjs", () => ({
+jest.mock('bcryptjs', () => ({
   __esModule: true,
-  hash: jest.fn(async () => "hashed-password"),
+  hash: jest.fn(async () => 'hashed-password'),
 }));
 
-describe("UserService", () => {
+describe('UserService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("getProfile returns selected user fields", async () => {
-    const prismaModule: any = require("../../../src/prisma");
+  it('getProfile returns selected user fields', async () => {
+    const prismaModule: any = require('../../../src/prisma');
     const mockPrisma = prismaModule.default;
     const service = new UserService();
     const userId = 42;
     const fakeUser = {
       id: 42,
-      email: "u@example.com",
-      name: "U",
+      email: 'u@example.com',
+      name: 'U',
       phone: null,
       bio: null,
       avatar: null,
@@ -54,13 +54,13 @@ describe("UserService", () => {
     const result = await service.getProfile(userId);
 
     expect(mockPrisma.user.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: userId } })
+      expect.objectContaining({ where: { id: userId } }),
     );
     expect(result).toEqual(fakeUser);
   });
 
-  it("updateProfile hashes password and updates relations", async () => {
-    const prismaModule: any = require("../../../src/prisma");
+  it('updateProfile hashes password and updates relations', async () => {
+    const prismaModule: any = require('../../../src/prisma');
     const mockPrisma = prismaModule.default;
     const service = new UserService();
     const userId = 7;
@@ -70,12 +70,12 @@ describe("UserService", () => {
         update: jest.fn().mockResolvedValue(undefined),
         findUnique: jest.fn().mockResolvedValue({
           id: userId,
-          email: "a@b.c",
-          name: "Alice",
+          email: 'a@b.c',
+          name: 'Alice',
           phone: null,
           bio: null,
           avatar: null,
-          skills: ["ts"],
+          skills: ['ts'],
           isVerified: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -96,28 +96,28 @@ describe("UserService", () => {
     mockPrisma.$transaction.mockImplementation(async (cb: any) => cb(tx));
 
     const payload = {
-      name: "Alice",
-      password: "new-password",
-      skills: ["ts"],
+      name: 'Alice',
+      password: 'new-password',
+      skills: ['ts'],
       experience: [
         {
-          title: "Engineer",
-          company: "Acme",
+          title: 'Engineer',
+          company: 'Acme',
           current: true,
-          startDate: new Date("2020-01-01"),
+          startDate: new Date('2020-01-01'),
           endDate: undefined,
-          description: "",
+          description: '',
         },
       ],
       education: [
         {
-          school: "Uni",
-          degree: "BSc",
-          fieldOfStudy: "CS",
+          school: 'Uni',
+          degree: 'BSc',
+          fieldOfStudy: 'CS',
           current: false,
-          startDate: new Date("2016-01-01"),
-          endDate: new Date("2020-01-01"),
-          description: "",
+          startDate: new Date('2016-01-01'),
+          endDate: new Date('2020-01-01'),
+          description: '',
         },
       ],
     } as any;
@@ -128,32 +128,42 @@ describe("UserService", () => {
     expect(tx.user.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: userId },
-        data: expect.objectContaining({ name: "Alice", password: "hashed-password", skills: ["ts"] }),
-      })
+        data: expect.objectContaining({
+          name: 'Alice',
+          password: 'hashed-password',
+          skills: ['ts'],
+        }),
+      }),
     );
 
     // experience & education should be replaced
-    expect(tx.experience.deleteMany).toHaveBeenCalledWith({ where: { userId } });
+    expect(tx.experience.deleteMany).toHaveBeenCalledWith({
+      where: { userId },
+    });
     expect(tx.experience.createMany).toHaveBeenCalledWith(
       expect.objectContaining({
         data: [
-          expect.objectContaining({ title: "Engineer", company: "Acme", userId }),
+          expect.objectContaining({
+            title: 'Engineer',
+            company: 'Acme',
+            userId,
+          }),
         ],
-      })
+      }),
     );
 
     expect(tx.education.deleteMany).toHaveBeenCalledWith({ where: { userId } });
     expect(tx.education.createMany).toHaveBeenCalledWith(
       expect.objectContaining({
         data: [
-          expect.objectContaining({ school: "Uni", degree: "BSc", userId }),
+          expect.objectContaining({ school: 'Uni', degree: 'BSc', userId }),
         ],
-      })
+      }),
     );
 
     // final return is fetched via findUnique inside the transaction
     expect(result).toEqual(
-      expect.objectContaining({ id: userId, name: "Alice", skills: ["ts"] })
+      expect.objectContaining({ id: userId, name: 'Alice', skills: ['ts'] }),
     );
   });
 });

@@ -32,8 +32,9 @@ describe('CompanyRouter', () => {
   });
 
   it('registers GET / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyRouter } = require('../../../../src/router/company/company.router');
+    const {
+      CompanyRouter,
+    } = require('../../../../src/router/company/company.router');
     new CompanyRouter();
 
     expect(getMock).toHaveBeenCalledTimes(1);
@@ -44,8 +45,9 @@ describe('CompanyRouter', () => {
   });
 
   it('registers PUT / with auth middleware and handler', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { CompanyRouter } = require('../../../../src/router/company/company.router');
+    const {
+      CompanyRouter,
+    } = require('../../../../src/router/company/company.router');
     new CompanyRouter();
 
     expect(putMock).toHaveBeenCalledTimes(1);
@@ -55,4 +57,3 @@ describe('CompanyRouter', () => {
     expect(typeof handler).toBe('function');
   });
 });
-

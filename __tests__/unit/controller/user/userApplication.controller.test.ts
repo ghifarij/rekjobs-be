@@ -92,7 +92,9 @@ describe('UserApplicationController', () => {
 
       await controller.deleteApplication(req, res as any, next as any);
       expect(mockService.deleteApplication).toHaveBeenCalledWith(77, 6);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Application deleted successfully' });
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Application deleted successfully',
+      });
     });
 
     it('calls next when user id missing', async () => {
@@ -104,4 +106,3 @@ describe('UserApplicationController', () => {
     });
   });
 });
-

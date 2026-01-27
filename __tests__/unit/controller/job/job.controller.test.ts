@@ -38,10 +38,18 @@ describe('JobController', () => {
       const next = jest.fn();
       mockService.getAllJobs.mockResolvedValue([]);
 
-      await controller.getAllJobs({ query: {} } as any, res as any, next as any);
+      await controller.getAllJobs(
+        { query: {} } as any,
+        res as any,
+        next as any,
+      );
       expect(mockService.getAllJobs).toHaveBeenCalledWith(undefined);
 
-      await controller.getAllJobs({ query: { search: '' } } as any, res as any, next as any);
+      await controller.getAllJobs(
+        { query: { search: '' } } as any,
+        res as any,
+        next as any,
+      );
       expect(mockService.getAllJobs).toHaveBeenCalledWith(undefined);
     });
   });
@@ -79,4 +87,3 @@ describe('JobController', () => {
     });
   });
 });
-
