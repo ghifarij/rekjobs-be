@@ -38,7 +38,7 @@ variable "ecr_repository_name" {
 
 variable "container_port" {
   type    = number
-  default = 8000
+  default = 80
 }
 
 variable "image_tag" {
