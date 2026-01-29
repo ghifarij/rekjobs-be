@@ -1,0 +1,92 @@
+name: Deploy to ECS (EC2)
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag to deploy (default: latest)'
+        required: false
+        default: 'latest'
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REGISTRY: ${{ vars.ECR_REGISTRY }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+  ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+
+jobs:
+  deploy:
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Determine image tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.image_tag }}" ]; then
+            echo "value=${{ github.event.inputs.image_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "value=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build image URI
+        id: img
+        run: |
+          echo "uri=${ECR_REGISTRY}/${ECR_REPOSITORY}:${{ steps.tag.outputs.value }}" >> $GITHUB_OUTPUT
+
+      - name: Install jq
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Get current task definition
+        id: current
+        run: |
+          TD_ARN=$(aws ecs describe-services \
+            --cluster "$ECS_CLUSTER_NAME" \
+            --services "$ECS_SERVICE_NAME" \
+            --query "services[0].taskDefinition" \
+            --output text)
+          echo "arn=$TD_ARN" >> $GITHUB_OUTPUT
+          aws ecs describe-task-definition --task-definition "$TD_ARN" --query "taskDefinition" > td.json
+
+      - name: Render new task definition with updated image
+        run: |
+          IMG="${{ steps.img.outputs.uri }}"
+          cat td.json \
+            | jq 'del(.status,.revision,.taskDefinitionArn,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy) |
+                  .containerDefinitions[0].image = env.IMG' > td-new.json
+          echo "New image: $IMG"
+
+      - name: Register new task definition
+        id: register
+        run: |
+          NEW_TD_ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://td-new.json \
+            --query "taskDefinition.taskDefinitionArn" \
+            --output text)
+          echo "arn=$NEW_TD_ARN" >> $GITHUB_OUTPUT
+
+      - name: Update service
+        run: |
+          aws ecs update-service \
+            --cluster "$ECS_CLUSTER_NAME" \
+            --service "$ECS_SERVICE_NAME" \
+            --task-definition "${{ steps.register.outputs.arn }}" \
+            --force-new-deployment
+
+      - name: Wait for service stability
+        run: |
+          aws ecs wait services-stable --cluster "$ECS_CLUSTER_NAME" --services "$ECS_SERVICE_NAME"
+
