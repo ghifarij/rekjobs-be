@@ -35,7 +35,24 @@ pnpm-debug.log*
 # Vercel
 .vercel
 
-.DS_Store
-
 # Prisma
 prisma/generated/
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform.lock.hcl
+*.tfvars
+*.tfplan
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# AWS
+*.pem
+.aws/

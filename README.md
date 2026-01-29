@@ -1,160 +1,237 @@
 # RekJobs Backend
 
-Welcome to the backend repository for **RekJobs**, a robust job board application backend built with modern web technologies. This project demonstrates a focus on clean architecture, type safety, and DevOps integration.
+Backend for RekJobs — a job board API built with Node.js, TypeScript, Express, Prisma, and PostgreSQL. The repo also showcases containerization, infrastructure-as-code with Terraform, AWS ECR/ECS deployment, and CI/CD with GitHub Actions.
+
+API base path: `/api` (health: `GET /api`)
 
 ## 🚀 Project Overview
 
-RekJobs Backend is a RESTful API designed to power job recruitment platforms. It handles user authentication, job postings, application management, and more, ensuring a seamless experience for both job seekers and employers.
+RekJobs Backend provides REST endpoints for authentication, company and user profiles, jobs, applications, and interviews. It emphasizes clean modular structure, type safety, testability, and production-ready DevOps.
 
 ## 🛠️ Tech Stack
 
-This project leverages a powerful stack to ensure performance, scalability, and developer experience.
-
 ### Core
 
-- **[Node.js](https://nodejs.org/)**: JavaScript runtime built on Chrome's V8 engine.
-- **[TypeScript](https://www.typescriptlang.org/)**: Strongly typed programming language that builds on JavaScript.
-- **[Express.js](https://expressjs.com/)**: Fast, unopinionated, minimalist web framework for Node.js.
+- Node.js 20, TypeScript, Express.js
 
 ### Database & ORM
 
-- **[PostgreSQL](https://www.postgresql.org/)**: robust open source object-relational database system.
-- **[Prisma](https://www.prisma.io/)**: Next-generation Node.js and TypeScript ORM for interacting with the database.
+- PostgreSQL, Prisma (with generated client, migrations under `prisma/migrations`)
 
-### Authentication & Security
+### Auth & Security
 
-- **[JSON Web Token (JWT)](https://jwt.io/)**: Compact, URL-safe means of representing claims to be transferred between two parties.
-- **[Bcrypt](https://www.npmjs.com/package/bcrypt)**: Library to help you hash passwords.
-- **Google Auth**: Integration with `google-auth-library` for OAuth flows.
+- JWT, bcrypt, optional Google OAuth
 
-### Utilities & Tools
+### Utilities
 
-- **[Cloudinary](https://cloudinary.com/)**: Cloud-based image and video management services.
-- **[Nodemailer](https://nodemailer.com/)**: Module for Node.js applications to allow easy email sending.
-- **[Handlebars](https://handlebarsjs.com/)**: Minimal templating on steroids, used here for email templates.
-- **Multer**: Middleware for handling `multipart/form-data`.
-- **Express Validator**: Set of express.js middlewares that wraps validator.js validator and sanitizer functions.
+- Cloudinary, Nodemailer (SMTP), Handlebars templates, Multer, Express Validator
 
-### Development Qualities
+### Code Quality
 
-- **[ESLint](https://eslint.org/)**: Statically analyzes your code to quickly find problems.
-- **[Prettier](https://prettier.io/)**: An opinionated code formatter.
+- ESLint, Prettier, Jest for unit tests
 
-## 📂 Project Structure
-
-The project follows a modular architecture within the `src` directory:
+## 📂 Repository Structure
 
 ```
 src/
-├── controller/   # Request handlers and business logic entry points
-├── middleware/   # Express middlewares (auth, validation, etc.)
-├── router/       # API route definitions
-├── services/     # Business logic and database interactions
-├── types/        # TypeScript type definitions
-├── utils/        # Helper functions and utilities
-├── index.ts      # Application entry point
-└── prisma.ts     # Prisma client instance
+├── controller/           # Route handlers
+├── middleware/           # Auth, validation, etc.
+├── router/               # API routes
+├── services/             # Business logic
+├── types/                # TS types and Express typings
+├── utils/                # Helpers (email, auth)
+├── index.ts              # App entrypoint (port 8000)
+└── prisma.ts             # Prisma client
+
+prisma/
+├── schema.prisma         # DB schema
+└── migrations/           # SQL migrations
+
+infra/
+├── modules/
+│   ├── vpc/              # VPC, IGW, public subnets, routes
+│   ├── iam/              # ECS instance profile + task exec role
+│   ├── ecs_cluster_ec2/  # ECS cluster, SG, launch template, ASG
+│   └── ecs_service/      # Task definition + service + CW logs
+├── envs/
+│   └── dev/              # Composes modules for dev env
+└── bootstrap/            # Optional remote state (S3+DynamoDB)
+
+.github/workflows/
+├── lint.yml              # ESLint + Prettier check
+├── test.yml              # Unit tests + coverage artifact
+├── ecr-publish.yml       # Build + push image to ECR
+└── deploy.yml            # Update ECS service to new task def
+
+Dockerfile                # Multi-stage build (builder/runner)
+docker-compose.yml        # Local Postgres + backend
 ```
 
-## ☸️ DevOps & Automation
-
-This project implements key DevOps practices to ensure reliability and consistent deployment environments.
-
-### Docker
-
-The application is containerized using **Docker** and orchestrated with **Docker Compose**, ensuring that it runs consistently across any environment.
-
-- **Base Image**: `node:20-alpine` for a lightweight footprint.
-- **Optimization**: Layer caching is utilized for faster builds (copying `package.json` first).
-- **Prisma**: Includes schema generation during the build process to ensure type safety inside the container.
-
-### CI/CD (GitHub Actions)
-
-Automated workflows are set up using GitHub Actions to maintain code quality:
-
-- **Lint & Format Workflow**: automatically runs on push and pull requests to `main` or `master`.
-  - Installs dependencies with caching.
-  - Generates Prisma client.
-  - Runs Prettier to check formatting.
-  - Runs ESLint to catch potential errors.
-
-## 🚀 Getting Started
+## ▶️ Getting Started (Local)
 
 ### Prerequisites
 
-- Node.js (v20+)
-- PostgreSQL
+- Node.js 20+
 - npm
+- PostgreSQL (or Docker if using Compose)
 
-### Installation
+### Install & Env
 
-1.  **Clone the repository**
-
-    ```bash
-    git clone https://github.com/ghifarij/rekjobs-be.git
-    cd rekjobs-be
-    ```
-
-2.  **Install dependencies**
-
-    ```bash
-    npm install
-    ```
-
-3.  **Environment Variables**
-    Create a `.env` file in the root directory and configure the necessary variables (Database URL, JWT Secret, Cloudinary credentials, etc.).
-
-4.  **Database Setup**
-
-    ```bash
-    # Generate Prisma Client
-    npx prisma generate
-
-    # Push schema to database
-    npx prisma db push
-    ```
-
-### Running Locally
-
-```bash
-# Development mode with hot reload
-npm run dev
-
-# Build the project
-npm run build
-
-# Start production server
-npm start
+```
+npm install
+cp .env.example .env
 ```
 
-### Running with Docker
+Fill required variables (DB URLs, JWT, email/SMTP, Cloudinary, etc.).
 
-1.  **Build the image**
+### Database
 
-    ```bash
-    docker build -t rekjobs-be .
-    ```
+```
+npx prisma generate
+npx prisma db push
+```
 
-2.  **Run the container**
-    ```bash
-    docker run -p 8000:8000 --env-file .env rekjobs-be
-    ```
+### Run
 
-### Running with Docker Compose
+```
+# Dev with hot reload
+npm run dev
 
-1.  **Prepare Environment Variables**
-    This project uses `.env` for local development and `.env.local` for Docker Compose environment variables.
+# Production build
+npm run build && npm start
+```
 
-    Copy `.env.example` to `.env.local` and fill in the values:
+## 🐳 Docker & Compose
 
-    ```bash
-    cp .env.example .env.local
-    ```
+The app is containerized with a multi-stage Dockerfile:
 
-2.  **Start Services**
+- Builder: installs deps, generates Prisma Client, builds TS
+- Runner: installs prod deps only, runs `node dist/index.js`
 
-    ```bash
-    docker-compose up -d
-    ```
+### Docker
 
-    This will start both the backend service and the PostgreSQL database.
+```
+docker build -t rekjobs-be .
+docker run -p 8000:8000 --env-file .env rekjobs-be
+```
+
+### Docker Compose (includes Postgres)
+
+```
+cp .env.example .env.local  # includes local Postgres defaults
+docker-compose up -d
+```
+
+Compose brings up:
+
+- `postgres`: Postgres 16 with healthcheck and persisted volume
+- `backend`: Express API (port 8000) wired to Postgres
+
+## ☁️ Infrastructure (Terraform in `infra/`)
+
+Production-ready, free-tier–friendly AWS setup using ECS on EC2 (no ALB/NAT), public subnet only, CloudWatch Logs, and ECR for images.
+
+### Layout
+
+- `modules/vpc`: VPC with DNS, IGW, public subnets and route table
+- `modules/iam`: EC2 instance profile (ECS agent) + ECS task execution role
+- `modules/ecs_cluster_ec2`: ECS cluster, instance SG, latest ECS-optimized AL2 AMI (via SSM), Launch Template, ASG
+- `modules/ecs_service`: EC2 launch type service + task definition, bridge networking, hostPort mapping, CW log group `/ecs/<service>`
+- `envs/dev`: Wires modules together; outputs ECR repo URL, cluster, and service name
+- `bootstrap`: Optional S3 bucket + DynamoDB table for Terraform remote state
+
+### Defaults
+
+- Region: `ap-southeast-2` (override `var.aws_region`)
+- Instance type: `t3.micro` (override `var.instance_type`)
+- App port: `8000` (`var.container_port`)
+- ECR repo: `rekjobs-be` (`var.ecr_repository_name`)
+- Image tag: `latest` (`var.image_tag`)
+
+### Quickstart (local state)
+
+```
+cd infra/envs/dev
+terraform init
+terraform apply -auto-approve
+```
+
+Then build and push an image to the ECR repo printed by outputs:
+
+```
+export REGION=$(terraform output -raw aws_region 2>/dev/null || echo ap-southeast-2)
+export REPO=$(terraform output -raw ecr_repository_url)
+aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin "$REPO"
+docker build -t rekjobs-be:latest ../../..
+docker tag rekjobs-be:latest "$REPO:latest"
+docker push "$REPO:latest"
+```
+
+Update the running task by changing `var.image_tag` (or re-registering a task with the new image) and `terraform apply`, or force a new deployment from the ECS console.
+
+### Remote State (optional)
+
+1. `infra/bootstrap`: set `state_bucket_name`, `lock_table_name`, `aws_region` → `terraform init && terraform apply`
+2. `infra/envs/dev/provider.tf`: uncomment the `backend "s3"` block and fill values
+3. `terraform init` to migrate local state to S3
+
+## 📦 AWS ECR
+
+Images are stored in ECR. You can push manually (above) or via GitHub Actions. The service pulls `ECR_REGISTRY/ECR_REPOSITORY:IMAGE_TAG`.
+
+## 🔁 CI/CD (GitHub Actions)
+
+Workflows live in `.github/workflows/`:
+
+- `lint.yml` (Lint & Format): runs ESLint and Prettier on pushes/PRs to `main`/`master`.
+- `test.yml` (Unit Tests): installs deps, runs Jest, uploads coverage artifact.
+- `ecr-publish.yml` (Build & Push to ECR): on push to `main`, builds Docker image and pushes both `latest` and `${{ github.sha }}` tags to ECR.
+- `deploy.yml` (Deploy to ECS): on push to `main` or manual dispatch, fetches current task def, updates container image to a provided tag (default `latest`), registers a new task def, updates the service, and waits for stability.
+
+### Required GitHub Settings
+
+Secrets (Repository or Environment):
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+
+Variables (Repository or Environment):
+
+- `AWS_REGION` — e.g., `ap-southeast-2`
+- `ECR_REGISTRY` — `<aws_account_id>.dkr.ecr.<region>.amazonaws.com`
+- `ECR_REPOSITORY` — `rekjobs-be` (or your repo name)
+- `ECS_CLUSTER_NAME` — from Terraform output
+- `ECS_SERVICE_NAME` — from Terraform output
+
+Typical flow:
+
+1. Push to `main` → `ecr-publish.yml` builds and pushes images
+2. Deploy via `deploy.yml` (auto on push or manual with `image_tag` input) to roll the service
+
+## 🧪 Testing
+
+```
+npm test           # run unit tests
+npm run test:watch # watch mode
+npm run test:cov   # coverage
+```
+
+Coverage artifacts are uploaded by CI on every run.
+
+## 🧹 Lint & Format
+
+```
+npm run lint
+npm run lint:fix
+npm run format
+npm run format:check
+```
+
+## 🔌 API Health
+
+- `GET /api` → `{ status: "ok", message: "Welcome to RekJobs API" }`
+
+## Notes
+
+- The app listens on `0.0.0.0:${PORT||8000}` for container friendliness.
+- `vercel.json` exists for earlier experiments; deployment is currently via AWS ECS.
