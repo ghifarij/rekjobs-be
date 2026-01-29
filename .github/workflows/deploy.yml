@@ -89,4 +89,3 @@ jobs:
       - name: Wait for service stability
         run: |
           aws ecs wait services-stable --cluster "$ECS_CLUSTER_NAME" --services "$ECS_SERVICE_NAME"
-

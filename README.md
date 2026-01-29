@@ -11,18 +11,23 @@ RekJobs Backend provides REST endpoints for authentication, company and user pro
 ## 🛠️ Tech Stack
 
 ### Core
+
 - Node.js 20, TypeScript, Express.js
 
 ### Database & ORM
+
 - PostgreSQL, Prisma (with generated client, migrations under `prisma/migrations`)
 
 ### Auth & Security
+
 - JWT, bcrypt, optional Google OAuth
 
 ### Utilities
+
 - Cloudinary, Nodemailer (SMTP), Handlebars templates, Multer, Express Validator
 
 ### Code Quality
+
 - ESLint, Prettier, Jest for unit tests
 
 ## 📂 Repository Structure
@@ -65,24 +70,29 @@ docker-compose.yml        # Local Postgres + backend
 ## ▶️ Getting Started (Local)
 
 ### Prerequisites
+
 - Node.js 20+
 - npm
 - PostgreSQL (or Docker if using Compose)
 
 ### Install & Env
+
 ```
 npm install
 cp .env.example .env
 ```
+
 Fill required variables (DB URLs, JWT, email/SMTP, Cloudinary, etc.).
 
 ### Database
+
 ```
 npx prisma generate
 npx prisma db push
 ```
 
 ### Run
+
 ```
 # Dev with hot reload
 npm run dev
@@ -94,21 +104,26 @@ npm run build && npm start
 ## 🐳 Docker & Compose
 
 The app is containerized with a multi-stage Dockerfile:
+
 - Builder: installs deps, generates Prisma Client, builds TS
 - Runner: installs prod deps only, runs `node dist/index.js`
 
 ### Docker
+
 ```
 docker build -t rekjobs-be .
 docker run -p 8000:8000 --env-file .env rekjobs-be
 ```
 
 ### Docker Compose (includes Postgres)
+
 ```
 cp .env.example .env.local  # includes local Postgres defaults
 docker-compose up -d
 ```
+
 Compose brings up:
+
 - `postgres`: Postgres 16 with healthcheck and persisted volume
 - `backend`: Express API (port 8000) wired to Postgres
 
@@ -117,6 +132,7 @@ Compose brings up:
 Production-ready, free-tier–friendly AWS setup using ECS on EC2 (no ALB/NAT), public subnet only, CloudWatch Logs, and ECR for images.
 
 ### Layout
+
 - `modules/vpc`: VPC with DNS, IGW, public subnets and route table
 - `modules/iam`: EC2 instance profile (ECS agent) + ECS task execution role
 - `modules/ecs_cluster_ec2`: ECS cluster, instance SG, latest ECS-optimized AL2 AMI (via SSM), Launch Template, ASG
@@ -125,6 +141,7 @@ Production-ready, free-tier–friendly AWS setup using ECS on EC2 (no ALB/NAT), 
 - `bootstrap`: Optional S3 bucket + DynamoDB table for Terraform remote state
 
 ### Defaults
+
 - Region: `ap-southeast-2` (override `var.aws_region`)
 - Instance type: `t3.micro` (override `var.instance_type`)
 - App port: `8000` (`var.container_port`)
@@ -132,12 +149,15 @@ Production-ready, free-tier–friendly AWS setup using ECS on EC2 (no ALB/NAT), 
 - Image tag: `latest` (`var.image_tag`)
 
 ### Quickstart (local state)
+
 ```
 cd infra/envs/dev
 terraform init
 terraform apply -auto-approve
 ```
+
 Then build and push an image to the ECR repo printed by outputs:
+
 ```
 export REGION=$(terraform output -raw aws_region 2>/dev/null || echo ap-southeast-2)
 export REPO=$(terraform output -raw ecr_repository_url)
@@ -146,12 +166,14 @@ docker build -t rekjobs-be:latest ../../..
 docker tag rekjobs-be:latest "$REPO:latest"
 docker push "$REPO:latest"
 ```
+
 Update the running task by changing `var.image_tag` (or re-registering a task with the new image) and `terraform apply`, or force a new deployment from the ECS console.
 
 ### Remote State (optional)
-1) `infra/bootstrap`: set `state_bucket_name`, `lock_table_name`, `aws_region` → `terraform init && terraform apply`
-2) `infra/envs/dev/provider.tf`: uncomment the `backend "s3"` block and fill values
-3) `terraform init` to migrate local state to S3
+
+1. `infra/bootstrap`: set `state_bucket_name`, `lock_table_name`, `aws_region` → `terraform init && terraform apply`
+2. `infra/envs/dev/provider.tf`: uncomment the `backend "s3"` block and fill values
+3. `terraform init` to migrate local state to S3
 
 ## 📦 AWS ECR
 
@@ -169,10 +191,12 @@ Workflows live in `.github/workflows/`:
 ### Required GitHub Settings
 
 Secrets (Repository or Environment):
+
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 
 Variables (Repository or Environment):
+
 - `AWS_REGION` — e.g., `ap-southeast-2`
 - `ECR_REGISTRY` — `<aws_account_id>.dkr.ecr.<region>.amazonaws.com`
 - `ECR_REPOSITORY` — `rekjobs-be` (or your repo name)
@@ -180,8 +204,9 @@ Variables (Repository or Environment):
 - `ECS_SERVICE_NAME` — from Terraform output
 
 Typical flow:
-1) Push to `main` → `ecr-publish.yml` builds and pushes images
-2) Deploy via `deploy.yml` (auto on push or manual with `image_tag` input) to roll the service
+
+1. Push to `main` → `ecr-publish.yml` builds and pushes images
+2. Deploy via `deploy.yml` (auto on push or manual with `image_tag` input) to roll the service
 
 ## 🧪 Testing
 
@@ -190,6 +215,7 @@ npm test           # run unit tests
 npm run test:watch # watch mode
 npm run test:cov   # coverage
 ```
+
 Coverage artifacts are uploaded by CI on every run.
 
 ## 🧹 Lint & Format
