@@ -30,7 +30,7 @@ COPY --from=builder /app/dist ./dist
 RUN npm ci --omit=dev
 
 # Expose the application port
-EXPOSE 8000
+EXPOSE 80
 
 # Start without rebuilding
 CMD ["node", "dist/index.js"]
