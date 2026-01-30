@@ -64,3 +64,55 @@ variable "common_tags" {
     env        = "dev"
   }
 }
+
+# Optional: plain environment variables for the container
+variable "environment" {
+  type        = map(string)
+  default     = {}
+  description = "Non-sensitive env vars passed as plaintext to the container"
+}
+
+# Optional: container secrets mapping (env name -> valueFrom ARN)
+variable "container_secrets" {
+  type        = map(string)
+  default     = {}
+  description = "Sensitive env vars from SSM/Secrets Manager (valueFrom ARN)"
+}
+
+# Optional: grant the task execution role read access to these ARNs
+variable "ssm_parameter_arns" {
+  type        = list(string)
+  default     = []
+  description = "SSM Parameter Store ARNs readable by task execution role"
+}
+
+variable "secrets_manager_arns" {
+  type        = list(string)
+  default     = []
+  description = "Secrets Manager ARNs readable by task execution role"
+}
+
+# Easy-mode: build ARNs from a single prefix and key lists
+variable "secret_prefix_ssm" {
+  type        = string
+  default     = null
+  description = "Prefix for SSM parameters (e.g., /rekjobs/dev). If set, keys in secret_keys_ssm will be mapped to ARNs automatically."
+}
+
+variable "secret_keys_ssm" {
+  type        = list(string)
+  default     = []
+  description = "List of env var names stored as SSM parameters under secret_prefix_ssm"
+}
+
+variable "secrets_manager_name" {
+  type        = string
+  default     = null
+  description = "Secrets Manager secret name for a JSON secret (e.g., rekjobs/dev/app-secrets). If set, JSON keys in secrets_manager_json_keys will be mapped."
+}
+
+variable "secrets_manager_json_keys" {
+  type        = list(string)
+  default     = []
+  description = "List of JSON keys within the Secrets Manager secret to expose as env vars"
+}

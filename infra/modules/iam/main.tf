@@ -58,3 +58,42 @@ resource "aws_iam_role_policy_attachment" "task_execution_managed" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+data "aws_iam_policy_document" "task_execution_secrets" {
+  dynamic "statement" {
+    for_each = length(var.ssm_parameter_arns) > 0 ? [1] : []
+    content {
+      sid     = "SSMRead"
+      actions = [
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParameterHistory"
+      ]
+      resources = var.ssm_parameter_arns
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(var.secrets_manager_arns) > 0 ? [1] : []
+    content {
+      sid     = "SecretsManagerRead"
+      actions = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ]
+      resources = var.secrets_manager_arns
+    }
+  }
+}
+
+resource "aws_iam_policy" "task_execution_secrets" {
+  count       = (length(var.ssm_parameter_arns) + length(var.secrets_manager_arns)) > 0 ? 1 : 0
+  name        = "${var.name}-ecs-task-exec-secrets"
+  description = "Allow ECS task execution role to read SSM/Secrets Manager for container secrets"
+  policy      = data.aws_iam_policy_document.task_execution_secrets.json
+}
+
+resource "aws_iam_role_policy_attachment" "task_execution_secrets" {
+  count      = (length(var.ssm_parameter_arns) + length(var.secrets_manager_arns)) > 0 ? 1 : 0
+  role       = aws_iam_role.task_execution_role.name
+  policy_arn = aws_iam_policy.task_execution_secrets[0].arn
+}

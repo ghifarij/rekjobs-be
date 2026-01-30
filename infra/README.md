@@ -25,7 +25,7 @@ Defaults that matter
 
 - Region: `ap-southeast-2` (override `var.aws_region` in `envs/dev/variables.tf`).
 - Instance type: `t3.micro` (override `var.instance_type`).
-- App port: `8000` (override `var.container_port`).
+- App port: `80` (override `var.container_port`).
 - Image tag: `latest` (override `var.image_tag`).
 - ECR repo name: `rekjobs-be` (override `var.ecr_repository_name`).
 
@@ -58,9 +58,78 @@ What the modules create
 - `ecs_cluster_ec2`: ECS cluster, security group opening `container_port` to 0.0.0.0/0 plus optional SSH; launch template using latest ECS-optimized AL2 AMI via SSM; single-ASG EC2 capacity (default desired 1).
 - `ecs_service`: EC2 launch type service with `bridge` network mode; container port mapped to host port; CloudWatch log group `/ecs/<service-name>` with 7-day retention.
 
+Environment variables and secrets
+
+- Pass non-sensitive env vars via module input `environment` (map of key -> value).
+- Pass sensitive env vars via `secrets` in the service module: map of env name -> valueFrom ARN (supports SSM Parameter Store and Secrets Manager).
+- Grant the ECS task execution role read access to those ARNs by setting `ssm_parameter_arns` and/or `secrets_manager_arns` in the IAM module.
+
+Example (envs/dev/main.tf):
+
+```
+module "iam" {
+  source = "../../modules/iam"
+  name   = local.name
+  tags   = var.common_tags
+
+  # Allow task execution role to read these secrets
+  ssm_parameter_arns = [
+    "arn:aws:ssm:ap-southeast-2:123456789012:parameter/rekjobs/dev/DATABASE_URL",
+  ]
+  secrets_manager_arns = [
+    "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rekjobs/dev/app-secrets-abc123",
+  ]
+}
+
+module "service" {
+  source                  = "../../modules/ecs_service"
+  name                    = var.app_name
+  cluster_arn             = module.ecs_cluster.cluster_arn
+  task_execution_role_arn = module.iam.task_execution_role_arn
+  image                   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_repository_name}:${var.image_tag}"
+  container_port          = var.container_port
+
+  environment = {
+    NEXT_PUBLIC_BASE_URL_FE = "https://app.example.com"
+    SMTP_HOST               = "smtp.example.com"
+    SMTP_PORT               = "587"
+  }
+
+  # Map env name -> valueFrom ARN
+  secrets = {
+    DATABASE_URL        = "arn:aws:ssm:ap-southeast-2:123456789012:parameter/rekjobs/dev/DATABASE_URL"
+    GOOGLE_CLIENT_ID    = "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rekjobs/dev/app-secrets:GOOGLE_CLIENT_ID::"
+    GOOGLE_CLIENT_SECRET= "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rekjobs/dev/app-secrets:GOOGLE_CLIENT_SECRET::"
+    AUTH_SECRET         = "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rekjobs/dev/app-secrets:AUTH_SECRET::"
+    JWT_KEY             = "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rekjobs/dev/app-secrets:JWT_KEY::"
+  }
+}
+```
+
+Notes:
+
+- For SSM Parameter Store, use the parameter ARN (SecureString recommended).
+- For Secrets Manager JSON secrets, append `:KEY::` to the secret ARN to target a JSON key.
+- The ECS agent uses the task execution role to fetch secret values at task start.
+
+Easy mode: generate ARNs automatically
+
+- In `infra/envs/dev/dev.tfvars`, set:
+  - `secret_prefix_ssm = "/rekjobs/dev"`
+  - `secret_keys_ssm = ["DATABASE_URL", "DIRECT_URL", "AUTH_SECRET", "JWT_KEY"]`
+  - `secrets_manager_name = "rekjobs/dev/app-secrets"` (optional)
+  - `secrets_manager_json_keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]` (optional)
+- Terraform will build `valueFrom` ARNs and IAM permissions automatically; you don’t need to type ARNs.
+
+Push .env to SSM quickly
+
+- Use the helper script to upload all keys in an env file to SSM under a prefix:
+  - `cd infra && ./scripts/push_env_to_ssm.sh /rekjobs/dev ../.env.local`
+- Then list your secret keys in `secret_keys_ssm` so the task definition receives them.
+
 Accessing the app
 
-- No load balancer; reach the app via the EC2 instance public IP on `container_port` (default 8000).
+- No load balancer; reach the app via the EC2 instance public IP on `container_port` (default 80).
 - For SSH access, set `var.ssh_ingress_cidr` (e.g., `"x.x.x.x/32"`); leave `null` to disable SSH.
 
 Assumptions

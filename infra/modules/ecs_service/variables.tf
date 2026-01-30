@@ -44,8 +44,13 @@ variable "environment" {
   default     = {}
 }
 
+variable "secrets" {
+  description = "Sensitive env vars from SSM or Secrets Manager. Map env name -> valueFrom ARN"
+  type        = map(string)
+  default     = {}
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
 }
-

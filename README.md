@@ -40,7 +40,7 @@ src/
 ├── services/             # Business logic
 ├── types/                # TS types and Express typings
 ├── utils/                # Helpers (email, auth)
-├── index.ts              # App entrypoint (port 8000)
+├── index.ts              # App entrypoint (port 80)
 └── prisma.ts             # Prisma client
 
 prisma/
@@ -112,7 +112,7 @@ The app is containerized with a multi-stage Dockerfile:
 
 ```
 docker build -t rekjobs-be .
-docker run -p 8000:8000 --env-file .env rekjobs-be
+docker run -p 80:80 --env-file .env rekjobs-be
 ```
 
 ### Docker Compose (includes Postgres)
@@ -125,7 +125,7 @@ docker-compose up -d
 Compose brings up:
 
 - `postgres`: Postgres 16 with healthcheck and persisted volume
-- `backend`: Express API (port 8000) wired to Postgres
+- `backend`: Express API (port 80) wired to Postgres
 
 ## ☁️ Infrastructure (Terraform in `infra/`)
 
@@ -144,7 +144,7 @@ Production-ready, free-tier–friendly AWS setup using ECS on EC2 (no ALB/NAT), 
 
 - Region: `ap-southeast-2` (override `var.aws_region`)
 - Instance type: `t3.micro` (override `var.instance_type`)
-- App port: `8000` (`var.container_port`)
+- App port: `80` (`var.container_port`)
 - ECR repo: `rekjobs-be` (`var.ecr_repository_name`)
 - Image tag: `latest` (`var.image_tag`)
 
@@ -233,5 +233,5 @@ npm run format:check
 
 ## Notes
 
-- The app listens on `0.0.0.0:${PORT||8000}` for container friendliness.
+- The app listens on `0.0.0.0:${PORT||80}` for container friendliness.
 - `vercel.json` exists for earlier experiments; deployment is currently via AWS ECS.
