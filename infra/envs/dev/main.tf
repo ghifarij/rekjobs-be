@@ -39,5 +39,7 @@ module "service" {
   image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecr_repository_name}:${var.image_tag}"
   container_port           = var.container_port
   desired_count            = var.desired_count
+  environment              = var.environment
+  secrets                  = merge(var.container_secrets, local.ssm_container_secrets, local.sm_container_secrets)
   tags                     = var.common_tags
 }
