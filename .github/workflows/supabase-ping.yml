@@ -1,4 +1,4 @@
-name: Supabase Keepalive
+name: Keep Supabase Alive
 
 on:
   schedule:
@@ -6,9 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  ping:
+  keepalive:
     runs-on: ubuntu-latest
 
     steps:
-      - run: curl "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-              -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"
+      - name: Ping Supabase
+        run: |
+          curl -s "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"
